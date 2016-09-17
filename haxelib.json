@@ -1,0 +1,20 @@
+{
+	"name": "ecx",
+	"license": "MIT",
+	"tags": [
+		"entity",
+		"component",
+		"system",
+		"ecs",
+		"ces",
+		"cross"
+	],
+	"classPath": "src",
+	"description": "ECX entity-component-system framework",
+	"contributors": [
+		"eliasku"
+	],
+	"releasenote": "API 2.0",
+	"version": "0.1.0",
+	"url": "https://github.com/eliasku/ecx"
+}
