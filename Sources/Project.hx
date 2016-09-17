@@ -1,27 +1,50 @@
 package;
 
-import kha.Framebuffer;
-import kha.Scheduler;
-import kha.System;
+import ecx.Engine;
+import ecx.World;
+import ecx.WorldConfig;
+import ecx.common.EcxCommon;
 
-import edge.*;
-import com.nodename.delaunay.Voronoi;
-import com.nodename.geom.LineSegment;
-import com.nodename.geom.Point;
-import com.nodename.geom.Rectangle;
-import zui.Zui;
-import zui.Id;
+import components.Position;
+import components.Dot;
+import systems.RenderDots;
 
 class Project {
+
+	var _world:World;
+
 	public function new() {
-		System.notifyOnRender(render);
-		Scheduler.addTimeTask(update, 0, 1 / 60);
-	}
-
-	function update(): Void {
 		
-	}
+		var config = new WorldConfig();
 
-	function render(framebuffer: Framebuffer): Void {		
+		// Priorities
+		// ...
+
+		config.include(new EcxCommon());
+
+		// Kha Services & Systems
+		// ...
+
+		// Project Services
+		// ...
+
+		// Project Systems
+		// ...
+
+		// Project Components
+		// ...
+
+		// Create the World
+		_world = Engine.createWorld(config, 1000);
+
+		// TODO: Move into Systems
+		// for (i in 0...300)
+		// 	world.engine.create([
+		// 		new Position(
+		// 			Math.random() * System.windowWidth(),
+		// 			Math.random() * System.windowHeight()),
+		// 		new Dot(kha.Color.fromFloats(Math.random(),Math.random(),Math.random()))
+		// 	]);
+
 	}
 }
