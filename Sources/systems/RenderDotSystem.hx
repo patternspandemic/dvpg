@@ -4,7 +4,6 @@ import ecx.Wire;
 import ecx.System;
 import ecx.Family;
 
-import kha.Framebuffer;
 import kha.Color;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
@@ -13,7 +12,7 @@ import core.KhaRenderService;
 import components.Position;
 import components.Dot;
 
-class RenderDots extends System {
+class RenderDotSystem extends System {
 	
 	var _entities:Family<Position, Dot>;
 	var _position:Wire<Position>;
@@ -37,9 +36,6 @@ class RenderDots extends System {
 			graphics.color = c;
 			graphics.drawCircle(x, y, 5.0, 3.0);
 		}
-
-		graphics.drawCircle(128, 128, 10, 5, 16);
-
 		graphics.end();
 	}
 }
