@@ -5,6 +5,9 @@ import ecx.World;
 import ecx.WorldConfig;
 import ecx.common.EcxCommon;
 
+import ecx.Entity;
+import ecx.Wire;
+
 import core.KhaUpdateService;
 import core.KhaRenderService;
 import components.Position;
@@ -13,7 +16,13 @@ import systems.RenderDots;
 
 class Project {
 
+	public static var width:Int = 1024;
+	public static var height:Int = 768;
+
 	var _world:World;
+
+	var _position:Wire<Position>;
+	var _dot:Wire<Dot>;
 
 	public function new() {
 		
@@ -33,7 +42,7 @@ class Project {
 
 		// Kha Services & Systems
 		config.add(new KhaUpdateService());
-		config.add(new KhaRenderService());
+		config.add(new KhaRenderService(width, height));
 		// config.add(new StatsView());
 
 		// Project Services
@@ -50,13 +59,11 @@ class Project {
 		_world = Engine.createWorld(config, 1000);
 
 		// TODO: Move into Systems
-		// for (i in 0...300)
-		// 	world.engine.create([
-		// 		new Position(
-		// 			Math.random() * System.windowWidth(),
-		// 			Math.random() * System.windowHeight()),
-		// 		new Dot(kha.Color.fromFloats(Math.random(),Math.random(),Math.random()))
-		// 	]);
-
+		for (i in 0...300) {
+			var entity = _world.create();
+			_position.create(entity).setup(Math.random() * width, Math.random() * height);
+			_dot.create(entity).setup(kha.Color.fromFloats(Math.random(), Math.random(), Math.random()));
+			_world.commit(entity);
+		}
 	}
 }

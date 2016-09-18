@@ -11,13 +11,13 @@ import kha.Scaler;
 class KhaRenderService extends Service {
 
 	// Rendering Systems will drawa on this canvas
-	public var canvas:Image;
+	public var canvas(default, null):Image;
 
-	public function new() {
-		canvas = Image.createRenderTarget(System.windowWidth(), System.windowHeight());
+	public function new(width:Int, height:Int): Void {
+		canvas = Image.createRenderTarget(width, height);
 	}
 
-	override function initialize() {
+	override function initialize(): Void {
 		System.notifyOnRender(render);
 	}
 
