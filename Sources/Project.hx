@@ -1,13 +1,15 @@
 package;
 
+import kha.Assets;
+
 import ecx.Engine;
 import ecx.World;
 import ecx.WorldConfig;
 import ecx.common.EcxCommon;
 
-import ecx.System;
-import ecx.Wire;
-import kha.Color;
+import ecx.System; //tmp
+import ecx.Wire; //tmp
+import kha.Color; //tmp
 
 import core.KhaUpdateService;
 import core.KhaRenderService;
@@ -15,6 +17,7 @@ import components.Position;
 import components.Motion;
 import components.Dot;
 import services.EntityCreatorService;
+import systems.StatsSystem;
 import systems.MotionSystem;
 import systems.RenderDotSystem;
 
@@ -26,6 +29,10 @@ class Project {
 	var _world:World;
 
 	public function new() {
+		Assets.loadEverything(createWorld);
+	}
+
+	function createWorld() {
 		
 		var config = new WorldConfig();
 
@@ -44,12 +51,12 @@ class Project {
 		// Kha Services & Systems
 		config.add(new KhaUpdateService());
 		config.add(new KhaRenderService(width, height));
-		// config.add(new StatsView());
 
 		// Project Services
 		config.add(new EntityCreatorService());
 
 		// Project Systems
+		config.add(new StatsSystem(), 1000);
 		config.add(new SitesSystem(), preUpdate);
 		config.add(new MotionSystem(), move);
 		config.add(new RenderDotSystem(), render);
@@ -64,6 +71,7 @@ class Project {
 	}
 }
 
+// TODO: Rename to Generator|ConfigSystem? and promote to systems package.
 @:config
 class SitesSystem extends System {
 
@@ -72,12 +80,12 @@ class SitesSystem extends System {
 	public function new() {}
 
 	public override function initialize() {
-		for (i in 0...25) {
+		for (i in 0...20) {
 			_creator.createDot(
 				Math.random() * Project.width,
 				Math.random() * Project.height,
-				(Math.random() * 10) - 5,
-				(Math.random() * 10) - 5,
+				(Math.random() * 50) - 5,
+				(Math.random() * 50) - 5,
 				Color.fromFloats(Math.random(), Math.random(), Math.random())
 			);
 		}
