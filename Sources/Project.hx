@@ -11,15 +11,10 @@ import ecx.System; //tmp
 import ecx.Wire; //tmp
 import kha.Color; //tmp
 
-import core.KhaUpdateService;
-import core.KhaRenderService;
-import components.Position;
-import components.Motion;
-import components.Dot;
-import services.EntityCreatorService;
-import systems.StatsSystem;
-import systems.MotionSystem;
-import systems.RenderDotSystem;
+import core.*;
+import components.*;
+import services.*;
+import systems.*;
 
 class Project {
 
@@ -58,10 +53,12 @@ class Project {
 		// Project Systems
 		config.add(new StatsSystem(), 1000);
 		config.add(new SitesSystem(), preUpdate);
+		config.add(new MouseSystem(), update);
 		config.add(new MotionSystem(), move);
 		config.add(new RenderDotSystem(), render);
 
 		// Project Components
+		config.add(new Mouse());
 		config.add(new Position());
 		config.add(new Motion());
 		config.add(new Dot());
@@ -90,5 +87,4 @@ class SitesSystem extends System {
 			);
 		}
 	}
-
 }
