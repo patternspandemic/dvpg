@@ -5,6 +5,7 @@ import ecx.AutoComp;
 class Position extends AutoComp<Point> {}
 
 class Point {
+
 	public var x : Float;
 	public var y : Float;
 
@@ -14,4 +15,5 @@ class Point {
 		this.x = x;
 		this.y = y;
 	}
+	
 }

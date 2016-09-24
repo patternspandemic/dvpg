@@ -5,6 +5,7 @@ import ecx.AutoComp;
 class Motion extends AutoComp<Velocity> {}
 
 class Velocity {
+
 	public var vx:Float;
 	public var vy:Float;
 
@@ -14,4 +15,5 @@ class Velocity {
 		this.vx = velocityX;
 		this.vy = velocityY;
 	}
+	
 }

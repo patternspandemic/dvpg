@@ -6,6 +6,7 @@ import kha.Color;
 class Dot extends AutoComp<DotData> {}
 
 class DotData {
+
 	public var color:Color;
 
 	public function new() {}
@@ -13,4 +14,5 @@ class DotData {
 	public function setup(color:Color): Void {
 		this.color = color;
 	}
+	
 }

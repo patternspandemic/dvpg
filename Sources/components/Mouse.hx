@@ -12,6 +12,7 @@ class MouseData {
 	public function new() {
 		buttons = new Map<Int, MouseButtonState>();
 	}
+
 }
 
 enum MouseButtonState {
