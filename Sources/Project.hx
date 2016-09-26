@@ -50,11 +50,13 @@ class Project {
 		config.add(new StatsSystem(), 1000);
 		config.add(new DotGeneratorSystem(), preUpdate);
 		config.add(new MouseSystem(), update);
+		config.add(new KeySystem(), update);
 		config.add(new MotionSystem(), move);
 		config.add(new RenderDotSystem(), render);
 
 		// Project Components
 		config.add(new Mouse());
+		config.add(new Keys());
 		config.add(new Position());
 		config.add(new Motion());
 		config.add(new Dot());
