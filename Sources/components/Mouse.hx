@@ -1,16 +1,17 @@
 package components;
 
 import ecx.AutoComp;
+import de.polygonal.ds.IntHashTable;
 
 class Mouse extends AutoComp<MouseData> {}
 
 class MouseData {
 	
-	public var buttons:Map<Int, MouseButtonState>;
+	public var buttons:IntHashTable<MouseButtonState>;
 	public var wheel:Int = 0;
 
 	public function new() {
-		buttons = new Map<Int, MouseButtonState>();
+		buttons = new IntHashTable<MouseButtonState>(16);
 	}
 
 }

@@ -6,6 +6,8 @@ import ecx.Family;
 
 import services.EntityCreatorService;
 
+import de.polygonal.ds.IntHashTable;
+
 import components.*;
 import components.Mouse.MouseButtonState;
 
@@ -26,10 +28,10 @@ class MouseSystem extends System {
 	var _dx:Int;
 	var _dy:Int;
 	var _w:Int;
-	var _buttons:Map<Int, MouseButtonState>;
+	var _buttons:IntHashTable<MouseButtonState>;
 
 	public function new(): Void {
-		_buttons = new Map<Int, MouseButtonState>();
+		_buttons = new IntHashTable<MouseButtonState>(16);
 		_w = 0;
 	}
 
@@ -60,20 +62,20 @@ class MouseSystem extends System {
 			// Remove previous frame's UP button
 			// states on the entity
 			for (k in mouse.buttons.keys()){
-				switch mouse.buttons[k] {
+				switch mouse.buttons.get(k) {
 					case Up(_, _):
-						mouse.buttons.remove(k);
-					case Down(_, _):
-						// Down states stay, are replaced by UPs
+						mouse.buttons.unset(k);
 					case _:
+						// Down states stay, are replaced by UPs
 				}
 			}
 
 			// Set this frame's states
 			for (k in _buttons.keys()){
-				mouse.buttons[k] = _buttons[k];
+				mouse.buttons.unset(k);
+				mouse.buttons.set(k, _buttons.get(k));
 				// and clear for next update
-				_buttons.remove(k);
+				_buttons.unset(k);
 			}
 
 			// Set mouse position, motion, and wheel
@@ -81,15 +83,19 @@ class MouseSystem extends System {
 			mouseMotion.setup(_dx, _dy);
 			mouse.wheel = _w;
 			_w = 0; // clear wheel for next update
+
+			trace(mouse);
 		}
 	}
 
 	function onMouseDown(button:Int, x:Int, y:Int): Void {
-		_buttons[button] = Down(x, y);
+		_buttons.unset(button);
+		_buttons.set(button, Down(x, y));
 	}
 
 	function onMouseUp(button:Int, x:Int, y:Int): Void {
-		_buttons[button] = Up(x, y);
+		_buttons.unset(button);
+		_buttons.set(button, Up(x, y));
 	}
 
 	function onMouseMove(x:Int, y:Int, dx:Int, dy:Int): Void {
