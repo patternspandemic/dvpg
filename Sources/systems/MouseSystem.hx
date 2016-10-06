@@ -83,8 +83,6 @@ class MouseSystem extends System {
 			mouseMotion.setup(_dx, _dy);
 			mouse.wheel = _w;
 			_w = 0; // clear wheel for next update
-
-			trace(mouse);
 		}
 	}
 
