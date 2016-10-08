@@ -2,34 +2,29 @@ package systems;
 
 import ecx.System;
 import ecx.Wire;
+import ecx.Family;
 import ecx.common.systems.FpsMeter;
 import ecx.common.systems.SystemRunner;
 import ecx.common.systems.TimeSystem;
 
+import kha.Key;
 import kha.Color;
 import kha.graphics2.Graphics;
 
 import core.KhaRenderService;
+import components.*;
 
 class StatsSystem extends System {
+
+	var _keysEntities:Family<Keys>;
+	var _keys:Wire<Keys>;
 
 	var _fpsMeter:Wire<FpsMeter>;
 	var _time:Wire<TimeSystem>;
 	var _runner:Wire<SystemRunner>;
 	var _krs:Wire<KhaRenderService>;
-	// var _keys:Wire<KeyPoll>;
-
-	// var _tf:TextField;
-	// var _prevKeyDown:Bool = false;
 
 	public function new() {}
-
-	// override function initialize() {
-	// 	_tf = new TextField();
-	// 	_tf.textColor = 0xFFFFFF;
-	// 	_tf.autoSize = TextFieldAutoSize.LEFT;
-	// 	Lib.current.stage.addChild(_tf);
-	// }
 
 	override function update() {
 		var graphics:Graphics = _krs.canvas.g2;
@@ -38,13 +33,15 @@ class StatsSystem extends System {
 			"dt: " + formatD2(_time.deltaTime * 1000) + " ms"
 		];
 
-		// var keyDown = _keys.isDown(Keyboard.F1);
-		// if(!_prevKeyDown && keyDown) {
-		// 	_runner.profile = !_runner.profile;
-		// }
-		// _prevKeyDown = keyDown;
+		// There's really only one keys entity here
+		for (entity in _keysEntities) {
+			var keys = _keys.get(entity);
+			// Toggle profilling with TAB key
+			if (keys.upKeys.has(Key.TAB.getIndex())) {
+				_runner.profile = !_runner.profile;
+			}
+		}
 
-		// TODO: Enable profiling
 		if (_runner.profile) {
 
 			lines.push("");
