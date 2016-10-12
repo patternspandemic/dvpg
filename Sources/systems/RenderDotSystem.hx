@@ -28,7 +28,7 @@ class RenderDotSystem extends System {
 		var c:Color;
 		var graphics:Graphics = _krs.canvas.g2;
 
-		graphics.begin();
+		graphics.begin(true, Color.fromValue(0xFF444444));
 		for (entity in _entities) {
 			x = _position.get(entity).x;
 			y = _position.get(entity).y;

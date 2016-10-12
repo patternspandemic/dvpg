@@ -6,9 +6,6 @@ import ecx.World;
 import ecx.Entity;
 
 import components.*;
-// import components.Position;
-// import components.Motion;
-// import components.Dot;
 
 class EntityCreatorService extends Service {
 

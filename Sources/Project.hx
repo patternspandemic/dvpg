@@ -5,7 +5,7 @@ import kha.Assets;
 import ecx.Engine;
 import ecx.World;
 import ecx.WorldConfig;
-import ecx.common.EcxCommon;
+import ecx.common.systems.*;
 
 import core.*;
 import components.*;
@@ -36,23 +36,26 @@ class Project {
 		var behavior:Int = 6;
 		var animate:Int = 7;
 		var render:Int = 8;
-
-		config.include(new EcxCommon());
+		var gui:Int = 9;
 
 		// Kha Services & Systems
 		config.add(new KhaUpdateService());
 		config.add(new KhaRenderService(width, height));
 
 		// Project Services
+		config.add(new SystemRunner());
 		config.add(new EntityCreatorService());
 
 		// Project Systems
-		config.add(new StatsSystem(), 1000);
+		config.add(new TimeSystem(), -1000);
+		config.add(new FpsMeter(), -999);
 		config.add(new DotGeneratorSystem(), preUpdate);
 		config.add(new MouseSystem(), update);
 		config.add(new KeySystem(), update);
 		config.add(new MotionSystem(), move);
 		config.add(new RenderDotSystem(), render);
+		config.add(new GuiSystem(), gui);
+		config.add(new StatsSystem(), 1000);
 
 		// Project Components
 		config.add(new Mouse());

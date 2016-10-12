@@ -14,7 +14,7 @@ class DotGeneratorSystem extends System {
 
 	public function new() {}
 
-	public override function initialize() {
+	override function initialize() {
 		for (i in 0...20) {
 			_creator.createDot(
 				Math.random() * Project.width,

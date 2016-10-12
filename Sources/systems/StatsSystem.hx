@@ -1,17 +1,14 @@
 package systems;
 
+import ecx.Family;
 import ecx.System;
 import ecx.Wire;
-import ecx.Family;
 import ecx.common.systems.FpsMeter;
 import ecx.common.systems.SystemRunner;
 import ecx.common.systems.TimeSystem;
 
 import kha.Key;
-import kha.Color;
-import kha.graphics2.Graphics;
 
-import core.KhaRenderService;
 import components.*;
 
 class StatsSystem extends System {
@@ -22,62 +19,82 @@ class StatsSystem extends System {
 	var _fpsMeter:Wire<FpsMeter>;
 	var _time:Wire<TimeSystem>;
 	var _runner:Wire<SystemRunner>;
-	var _krs:Wire<KhaRenderService>;
 
-	public function new() {}
+	var _clearMaps:Bool = false;
+
+	public var fps:Float = 0.0;
+	public var dt:Float = 0.0;
+	public var profile:Bool = false;
+	public var profiles:Map<String, SystemProfile>;
+	public var comps:Map<String, Int>;
+
+	public function new() {
+		this.profiles = new Map<String, SystemProfile>();
+		this.comps = new Map<String, Int>();
+	}
 
 	override function update() {
-		var graphics:Graphics = _krs.canvas.g2;
-		var lines = [
-			"fps: " + formatD2(_fpsMeter.framesPerSecond),
-			"dt: " + formatD2(_time.deltaTime * 1000) + " ms"
-		];
+		// React to Gui button
+		_runner.profile = this.profile;
 
 		// There's really only one keys entity here
 		for (entity in _keysEntities) {
 			var keys = _keys.get(entity);
-			// Toggle profilling with TAB key
-			if (keys.upKeys.has(Key.TAB.getIndex())) {
-				_runner.profile = !_runner.profile;
+			// Toggle profilling with ` key
+			if (keys.upKeys.has("`".code)) {
+				this.profile = !this.profile;
+				_runner.profile = this.profile;
 			}
 		}
 
-		if (_runner.profile) {
+		// Update fps and dt
+		this.fps = formatD2(_fpsMeter.framesPerSecond);
+		this.dt = formatD2(_time.deltaTime * 1000);
 
-			lines.push("");
+		if (this.profile) {
 
+			// Collect systems profile data
 			for (profile in _runner.profileData) {
-				var timing = '${formatD2(profile.updateTime * 1000)} + ${formatD2(profile.invalidateTime * 1000)} ms';
-				var timingMax = '${formatD2(profile.updateTimeMax * 1000)} + ${formatD2(profile.invalidateTimeMax * 1000)} ms';
-				var entitiesInfo = 'changed max: ${profile.changed}; removed max: ${profile.removed}';
-				lines.push('${profile.name} : $timing | max: $timingMax | $entitiesInfo');
+				this.profiles.set(
+					profile.name, 
+					{
+						timing: formatD2((profile.updateTime + profile.invalidateTime) * 1000),
+						timingMax: formatD2((profile.updateTimeMax + profile.invalidateTimeMax) * 1000),
+						changed: profile.changed,
+						removed: profile.removed
+					});
 			}
 
-			lines.push("");
-
-			for (component in world.components()) {
-				if (component != null) {
-					var name = Type.getClassName(Type.getClass(component));
-					var size = component.getObjectSize();
-					lines.push('$name : ${size > 0 ? Std.string(size) : "?"} bytes');
+			// Collect component profile data
+			for (comp in world.components()) {
+				if (comp != null) {
+					var name = Type.getClassName(Type.getClass(comp)).substring(11);
+					var size = comp.getObjectSize();
+					this.comps.set(name, size);
 				}
 			}
-		}
 
-
-		var lineYOffset:Int = 5;
-		graphics.begin(false);
-		graphics.color = Color.White;
-		graphics.fontSize = 14;
-		
-		for(line in lines) {
-			graphics.drawString(line, 5, lineYOffset);
-			lineYOffset += 20;
+			// Clear maps when profile turned off
+			_clearMaps = true;
 		}
-		graphics.end();
+		else {
+			if (_clearMaps) {
+				// Clear the maps
+				this.profiles = new Map<String, SystemProfile>();
+				this.comps = new Map<String, Int>();
+				_clearMaps = false;
+			}
+		}
 	}
 
 	function formatD2(f:Float):Float {
 		return Std.int(f * 100) / 100;
 	}
+}
+
+typedef SystemProfile = {
+	var timing:Float;
+	var timingMax:Float;
+	var changed:Int;
+	var removed:Int;
 }
