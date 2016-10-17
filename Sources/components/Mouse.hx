@@ -7,6 +7,7 @@ class Mouse extends AutoComp<MouseData> {}
 
 class MouseData {
 	
+	// TODO: Internalize mouse entity's position component.
 	public var buttons:IntHashTable<MouseButtonState>;
 	public var wheel:Int = 0;
 

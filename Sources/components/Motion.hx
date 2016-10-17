@@ -2,18 +2,7 @@ package components;
 
 import ecx.AutoComp;
 
-class Motion extends AutoComp<Velocity> {}
+import kha.FastFloat;
+import kha.math.FastVector2;
 
-class Velocity {
-
-	public var vx:Float;
-	public var vy:Float;
-
-	public function new() {}
-
-	public function setup(velocityX:Float, velocityY:Float) {
-		this.vx = velocityX;
-		this.vy = velocityY;
-	}
-	
-}
+class Motion extends AutoComp<FastVector2> {}

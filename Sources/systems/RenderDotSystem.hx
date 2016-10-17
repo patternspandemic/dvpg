@@ -5,17 +5,17 @@ import ecx.System;
 import ecx.Family;
 
 import kha.Color;
+import kha.math.FastMatrix3;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
 
 import core.KhaRenderService;
-import components.Position;
-import components.Dot;
+import components.*;
 
 class RenderDotSystem extends System {
 	
-	var _entities:Family<Position, Dot>;
-	var _position:Wire<Position>;
+	var _entities:Family<Transform, Dot>;
+	var _transform:Wire<Transform>;
 	var _dot:Wire<Dot>;
 
 	var _krs:Wire<KhaRenderService>;
@@ -23,18 +23,25 @@ class RenderDotSystem extends System {
 	public function new() {}
 
 	override function update(): Void {
-		var x:Float;
-		var y:Float;
+		var transform:FastMatrix3;
 		var c:Color;
 		var graphics:Graphics = _krs.canvas.g2;
 
 		graphics.begin(true, Color.fromValue(0xFF444444));
 		for (entity in _entities) {
-			x = _position.get(entity).x;
-			y = _position.get(entity).y;
+			transform = _transform.get(entity).transform;
 			c = _dot.get(entity).color;
 			graphics.color = c;
-			graphics.drawCircle(x, y, 5.0, 3.0);
+			graphics.pushTransformation(transform);
+			graphics.fillTriangle(
+				10.0, 0.0,
+				-10.0, 10.0,
+				-10.0, -10.0);
+			graphics.fillTriangle(
+				-15.0, 0.0,
+				-10.0, -5.0,
+				-10.0, 5.0);
+			graphics.popTransformation();
 		}
 		graphics.end();
 	}

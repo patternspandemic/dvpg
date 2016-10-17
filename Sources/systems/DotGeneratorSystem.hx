@@ -16,11 +16,14 @@ class DotGeneratorSystem extends System {
 
 	override function initialize() {
 		for (i in 0...20) {
+			var vx: Float = ((Math.random() - 0.5) * 2.0) * 50;
+			var vy: Float = ((Math.random() - 0.5) * 2.0) * 50;
 			_creator.createDot(
 				Math.random() * Project.width,
 				Math.random() * Project.height,
-				(Math.random() * 50) - 5,
-				(Math.random() * 50) - 5,
+				Math.atan2(vy, vx),
+				0.8, 0.7,
+				vx, vy,
 				Color.fromFloats(Math.random(), Math.random(), Math.random())
 			);
 		}

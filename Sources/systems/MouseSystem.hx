@@ -80,7 +80,9 @@ class MouseSystem extends System {
 
 			// Set mouse position, motion, and wheel
 			mousePosition.setup(_x, _y);
-			mouseMotion.setup(_dx, _dy);
+			// mouseMotion.setup(_dx, _dy);
+			mouseMotion.x = _dx;
+			mouseMotion.y = _dy;
 			mouse.wheel = _w;
 			_w = 0; // clear wheel for next update
 		}

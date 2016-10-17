@@ -52,6 +52,7 @@ class Project {
 		config.add(new DotGeneratorSystem(), preUpdate);
 		config.add(new MouseSystem(), update);
 		config.add(new KeySystem(), update);
+		config.add(new TransformSystem(), update);
 		config.add(new MotionSystem(), move);
 		config.add(new RenderDotSystem(), render);
 		config.add(new GuiSystem(), gui);
@@ -60,6 +61,7 @@ class Project {
 		// Project Components
 		config.add(new Mouse());
 		config.add(new Keys());
+		config.add(new Transform());
 		config.add(new Position());
 		config.add(new Motion());
 		config.add(new Dot());
