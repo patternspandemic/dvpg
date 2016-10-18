@@ -33,19 +33,21 @@ class MotionSystem extends System {
 			pos = trans.position;
 			vel = _motion.get(entity);
 
+			// Bounce horizontally
 			x = pos.x + (vel.x * dt);
-			vx = vel.x;
 			if (x < 0) { x = 0; vel.x *= -1;}
 			else if (x > Project.width) { x = Project.width; vel.x *= -1;}
 
+			// Bounce vertically
 			y = pos.y + (vel.y * dt);
-			vy = vel.y;
 			if (y < 0) { y = 0; vel.y *= -1;}
 			else if (y > Project.height) { y = Project.height; vel.y *= -1;}
 
+			// Assign the new position
 			pos.x = x;
 			pos.y = y;
 
+			// Rotate in the direction of travel
 			trans.rotation = Math.atan2(vel.y, vel.x);
 		}
 	}

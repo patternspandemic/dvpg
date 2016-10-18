@@ -1,7 +1,6 @@
 package core;
 
 import ecx.Service;
-// import ecx.Wire;
 
 import kha.System;
 import kha.Framebuffer;

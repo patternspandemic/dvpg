@@ -62,7 +62,6 @@ class Project {
 		config.add(new Mouse());
 		config.add(new Keys());
 		config.add(new Transform());
-		config.add(new Position());
 		config.add(new Motion());
 		config.add(new Dot());
 

@@ -14,10 +14,8 @@ import components.Mouse.MouseButtonState;
 class MouseSystem extends System {
 
 	// The mouse family of entity
-	var _mouseEntities:Family<Mouse, Position, Motion>;
+	var _mouseEntities:Family<Mouse>;
 	var _mouse:Wire<Mouse>;
-	var _position:Wire<Position>;
-	var _motion:Wire<Motion>;
 
 	// For creating a mouse entity
 	var _creator:Wire<EntityCreatorService>;
@@ -56,8 +54,6 @@ class MouseSystem extends System {
 		// There's really only one mouse here
 		for (entity in _mouseEntities) {
 			var mouse = _mouse.get(entity);
-			var mousePosition = _position.get(entity);
-			var mouseMotion = _motion.get(entity);
 
 			// Remove previous frame's UP button
 			// states on the entity
@@ -79,10 +75,10 @@ class MouseSystem extends System {
 			}
 
 			// Set mouse position, motion, and wheel
-			mousePosition.setup(_x, _y);
-			// mouseMotion.setup(_dx, _dy);
-			mouseMotion.x = _dx;
-			mouseMotion.y = _dy;
+			mouse.position.x = _x;
+			mouse.position.y = _y;
+			mouse.changeInPosition.x = _dx;
+			mouse.changeInPosition.y = _dy;
 			mouse.wheel = _w;
 			_w = 0; // clear wheel for next update
 		}

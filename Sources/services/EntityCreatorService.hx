@@ -5,12 +5,13 @@ import ecx.Wire;
 import ecx.World;
 import ecx.Entity;
 
+import kha.math.Vector2i;
+
 import components.*;
 
 class EntityCreatorService extends Service {
 
 	var _transform:Wire<Transform>;
-	var _position:Wire<Position>;
 	var _motion:Wire<Motion>;
 	var _mouse:Wire<Mouse>;
 	var _keys:Wire<Keys>;
@@ -24,8 +25,6 @@ class EntityCreatorService extends Service {
 		var vel = _motion.create(entity);
 		vel.x = vx;
 		vel.y = vy;
-		// _position.create(entity).setup(x, y);
-		// _motion.create(entity).setup(vx, vy);
 		_dot.create(entity).setup(color);
 		world.commit(entity);
 		return entity;
@@ -33,12 +32,9 @@ class EntityCreatorService extends Service {
 
 	public function createMouse(x:Int, y:Int, dx:Int, dy:Int): Entity {
 		var entity:Entity = world.create();
-		_position.create(entity).setup(x, y);
-		var vel = _motion.create(entity);
-		vel.x = dx;
-		vel.y = dy;
-		// _motion.create(entity).setup(dx, dy);
-		_mouse.create(entity);
+		var mouseData = _mouse.create(entity);
+		mouseData.position = new Vector2i(x, y);
+		mouseData.changeInPosition = new Vector2i(dx, dy);
 		world.commit(entity);
 		return entity;
 	}
