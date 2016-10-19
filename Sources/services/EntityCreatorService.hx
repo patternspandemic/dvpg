@@ -11,12 +11,13 @@ import components.*;
 
 class EntityCreatorService extends Service {
 
-	var _transform:Wire<Transform>;
-	var _motion:Wire<Motion>;
-	var _mouse:Wire<Mouse>;
-	var _keys:Wire<Keys>;
-	var _bounds:Wire<Bounds>;
-	var _dot:Wire<Dot>;
+	var _mouse: Wire<Mouse>;
+	var _keys: Wire<Keys>;
+	var _transform: Wire<Transform>;
+	var _motion: Wire<Motion>;
+	var _bounds: Wire<Bounds>;
+	var _site: Wire<Site>;
+	var _dot: Wire<Dot>;
 
 	public function new(): Void {}
 
@@ -27,6 +28,7 @@ class EntityCreatorService extends Service {
 		vel.x = vx;
 		vel.y = vy;
 		_dot.create(entity).setup(color);
+		_site.create(entity).setTo(x, y);
 		world.commit(entity);
 		return entity;
 	}

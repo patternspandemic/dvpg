@@ -54,6 +54,7 @@ class Project {
 		config.add(new MouseSystem(), update);
 		config.add(new KeySystem(), update);
 		config.add(new TransformSystem(), update);
+		config.add(new SiteSystem(), update);
 		config.add(new MotionSystem(), move);
 		config.add(new RenderDotSystem(), render);
 		config.add(new GuiSystem(), gui);
@@ -64,6 +65,7 @@ class Project {
 		config.add(new Keys());
 		config.add(new Transform());
 		config.add(new Bounds());
+		config.add(new Site());
 		config.add(new Motion());
 		config.add(new Dot());
 

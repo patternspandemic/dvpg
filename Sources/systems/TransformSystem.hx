@@ -19,7 +19,7 @@ class TransformSystem extends System {
 	public function new() {}
 
 	override function update(): Void {
-		for (entity in _entities){
+		for (entity in _entities) {
 			// Update the entity's transform matrix by order of
 			// scale, rotate, translate.
 			var trans:TransformData = _transform.get(entity);
