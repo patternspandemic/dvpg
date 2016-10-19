@@ -43,6 +43,9 @@ class GuiSystem extends System {
 
 		if (this._showGui) {
 			var graphics:Graphics = _krs.canvas.g2;
+
+			graphics.pushTranslation(Project.width / -2, Project.height / -2);
+
 			_ui.redrawWindow(_winId);
 			_ui.begin(graphics);
 
@@ -103,6 +106,8 @@ class GuiSystem extends System {
 			}
 
 			_ui.end();
+
+			graphics.popTransformation();
 		}
 	}
 

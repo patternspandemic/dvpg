@@ -32,7 +32,7 @@ class RenderDotSystem extends System {
 			transform = _transform.get(entity).transform;
 			c = _dot.get(entity).color;
 			graphics.color = c;
-			graphics.pushTransformation(transform);
+			graphics.pushTransformation(graphics.transformation.multmat(transform));
 			graphics.fillTriangle(
 				10.0, 0.0,
 				-10.0, 10.0,

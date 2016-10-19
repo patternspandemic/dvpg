@@ -23,6 +23,15 @@ class MotionSystem extends System {
 	public function new() {}
 
 	override function update(): Void {
+
+		// Todo: Replace with a Bounds entity/component combo
+		var halfW: Int = Std.int(Project.width / 2);
+		var halfH: Int = Std.int(Project.height / 2);
+		var left: Int = halfW * -1;
+		var right: Int = halfW;
+		var top: Int = halfH * -1;
+		var bottom: Int = halfH;
+
 		var trans;
 		var pos;
 		var vel;
@@ -35,13 +44,13 @@ class MotionSystem extends System {
 
 			// Bounce horizontally
 			x = pos.x + (vel.x * dt);
-			if (x < 0) { x = 0; vel.x *= -1;}
-			else if (x > Project.width) { x = Project.width; vel.x *= -1;}
+			if (x < left) { x = left; vel.x *= -1;}
+			else if (x > right) { x = right; vel.x *= -1;}
 
 			// Bounce vertically
 			y = pos.y + (vel.y * dt);
-			if (y < 0) { y = 0; vel.y *= -1;}
-			else if (y > Project.height) { y = Project.height; vel.y *= -1;}
+			if (y < top) { y = top; vel.y *= -1;}
+			else if (y > bottom) { y = bottom; vel.y *= -1;}
 
 			// Assign the new position
 			pos.x = x;

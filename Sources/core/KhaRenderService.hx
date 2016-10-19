@@ -7,6 +7,7 @@ import kha.Framebuffer;
 import kha.Image;
 import kha.Scaler;
 import kha.Assets;
+import kha.math.FastMatrix3;
 
 class KhaRenderService extends Service {
 
@@ -15,6 +16,8 @@ class KhaRenderService extends Service {
 
 	public function new(width:Int, height:Int): Void {
 		canvas = Image.createRenderTarget(width, height);
+		// Move the canvas' origin in the center of the window
+		canvas.g2.translate(width / 2, height / 2);
 		canvas.g2.font = Assets.fonts.HackRegular;
 	}
 

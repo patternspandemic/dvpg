@@ -15,12 +15,18 @@ class DotGeneratorSystem extends System {
 	public function new() {}
 
 	override function initialize() {
-		for (i in 0...20) {
+
+		// For circular layout
+		var count: Int = 20;
+		var radBetween: Float = 2 * Math.PI / count;
+
+		for (i in 0...count) {
+			var x: Float = Math.cos(radBetween * i) * 100;
+			var y: Float = Math.sin(radBetween * i) * 100;
 			var vx: Float = ((Math.random() - 0.5) * 2.0) * 50;
 			var vy: Float = ((Math.random() - 0.5) * 2.0) * 50;
 			_creator.createDot(
-				Math.random() * Project.width,
-				Math.random() * Project.height,
+				x, y,
 				Math.atan2(vy, vx),
 				0.8, 0.7,
 				vx, vy,
