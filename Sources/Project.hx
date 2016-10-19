@@ -49,6 +49,7 @@ class Project {
 		// Project Systems
 		config.add(new TimeSystem(), -1000);
 		config.add(new FpsMeter(), -999);
+		config.add(new BoundsGeneratorSystem(), preUpdate);
 		config.add(new DotGeneratorSystem(), preUpdate);
 		config.add(new MouseSystem(), update);
 		config.add(new KeySystem(), update);
@@ -62,6 +63,7 @@ class Project {
 		config.add(new Mouse());
 		config.add(new Keys());
 		config.add(new Transform());
+		config.add(new Bounds());
 		config.add(new Motion());
 		config.add(new Dot());
 

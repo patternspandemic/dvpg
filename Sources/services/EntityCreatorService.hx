@@ -15,6 +15,7 @@ class EntityCreatorService extends Service {
 	var _motion:Wire<Motion>;
 	var _mouse:Wire<Mouse>;
 	var _keys:Wire<Keys>;
+	var _bounds:Wire<Bounds>;
 	var _dot:Wire<Dot>;
 
 	public function new(): Void {}
@@ -42,6 +43,13 @@ class EntityCreatorService extends Service {
 	public function createKeys(): Entity {
 		var entity:Entity = world.create();
 		_keys.create(entity);
+		world.commit(entity);
+		return entity;
+	}
+
+	public function createBounds(): Entity {
+		var entity: Entity = world.create();
+		_bounds.create(entity);
 		world.commit(entity);
 		return entity;
 	}
