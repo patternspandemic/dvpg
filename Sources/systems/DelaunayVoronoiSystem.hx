@@ -13,8 +13,11 @@ import com.nodename.geom.LineSegment;
 
 class DelaunayVoronoiSystem extends System {
 	
+	var _siteFamily: Family<Site>;
+	var _site: Wire<Site>;
+
 	// How to make components optional for the family?
-	var _dualGraphs: Family<Sites, Triangles, Regions, Hull, Onion, MinSpanTree>; // Cell
+	var _dualGraphFamily: Family<Sites, Triangles, Regions, Hull, Onion, MinSpanTree>; // Cell
 	var _sites: Wire<Sites>;
 	var _triangles: Wire<Triangles>;
 	var _regions: Wire<Regions>;
@@ -23,7 +26,7 @@ class DelaunayVoronoiSystem extends System {
 	var _minSpanTrees: Wire<MinSpanTree>;
 	//var _cells: Wire<Cell>;
 
-	var _boundedEntities: Family<Bounds>;
+	var _boundsFamily: Family<Bounds>;
 	var _bounds: Wire<Bounds>;
 
 	var _voronoi: Voronoi;
@@ -33,10 +36,25 @@ class DelaunayVoronoiSystem extends System {
 	override function update(): Void {
 
 		// Get the bounds of the first and only bounded entity
-		var bounds = _bounds.get(_boundedEntities.get(0));
+		var bounds = _bounds.get(_boundsFamily.get(0));
 
-		// Gather site Points, record site entity ids into sites component
+		for (graphEntity in _dualGraphFamily) {
 
+			// Gather site Points, record site entity ids into sites component
+			var points: Array<Point> = new Array<Point>(); 
+			var sites = _sites.get(graphEntity); // Sites component of graphEntity
+			sites.included.clear(); // Clear previous frame's included site entities
+			for (sitedEntity in _siteFamily) {
+				if (!sites.excluded.has(sitedEntity.id)) {
+					// sitedEntity should be included, and its Point pushed to
+					// the collection to be passed to Voronnoi. 
+					sites.included.set(sitedEntity.id);
+					points.push(_site.get(sitedEntity));
+				}
+			}
+
+			
+			
 		// Dispose of _voronoi if not null
 		// Create new Voronoi with site points and bounds
 
@@ -53,5 +71,7 @@ class DelaunayVoronoiSystem extends System {
 		// Gather _voronoi.spanningTree and map to _minSpanTrees component
 
 		// Calculate the onion and assign to _onions component
+
+		}
 	}
 }

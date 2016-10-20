@@ -70,7 +70,7 @@ class EntityCreatorService extends Service {
 	// TODO: Parametrize creation of various graph components
 	public function createDelaunayVoronoiGraph(): Entity {
 		var entity: Entity = world.create();
-		_sites.create(entity);
+		_sites.create(entity).setup();
 		_triangles.create(entity);
 		_triangulation.create(entity);
 		_regions.create(entity);
