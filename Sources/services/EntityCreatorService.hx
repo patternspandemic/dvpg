@@ -16,7 +16,17 @@ class EntityCreatorService extends Service {
 	var _transform: Wire<Transform>;
 	var _motion: Wire<Motion>;
 	var _bounds: Wire<Bounds>;
+
 	var _site: Wire<Site>;
+	var _sites: Wire<Sites>;
+	var _triangles: Wire<Triangles>;
+	var _region: Wire<Region>;
+	var _regions: Wire<Regions>;
+	var _hull: Wire<Hull>;
+	var _onion: Wire<Onion>;
+	var _minSpanTree: Wire<MinSpanTree>;
+	//var _cell: Wire<Cell>;
+
 	var _dot: Wire<Dot>;
 
 	public function new(): Void {}
@@ -53,6 +63,19 @@ class EntityCreatorService extends Service {
 		var entity: Entity = world.create();
 		_bounds.create(entity);
 		world.commit(entity);
+		return entity;
+	}
+
+	// TODO: Parametrize creation of various graph components
+	public function createDelaunayVoronoiGraph(): Entity {
+		var entity: Entity = world.create();
+		_sites.create(entity);
+		_triangles.create(entity);
+		_regions.create(entity);
+		_hull.create(entity);
+		_onion.create(entity);
+		_minSpanTree.create(entity);
+		// _cell.create(entity);
 		return entity;
 	}
 }

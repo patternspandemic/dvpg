@@ -11,6 +11,7 @@ import core.*;
 import components.*;
 import services.*;
 import systems.*;
+import systems.generators.*;
 
 class Project {
 
@@ -50,11 +51,13 @@ class Project {
 		config.add(new TimeSystem(), -1000);
 		config.add(new FpsMeter(), -999);
 		config.add(new BoundsGeneratorSystem(), preUpdate);
+		config.add(new GlobalGraphGeneratorSystem(), preUpdate);
 		config.add(new DotGeneratorSystem(), preUpdate);
 		config.add(new MouseSystem(), update);
 		config.add(new KeySystem(), update);
 		config.add(new TransformSystem(), update);
 		config.add(new SiteSystem(), update);
+		config.add(new DelaunayVoronoiSystem(), update);
 		config.add(new MotionSystem(), move);
 		config.add(new RenderDotSystem(), render);
 		config.add(new GuiSystem(), gui);
@@ -72,7 +75,7 @@ class Project {
 		config.add(new Regions());
 		config.add(new Hull());
 		config.add(new Onion());
-		// MinSpanTree - array of line segments
+		config.add(new MinSpanTree());
 		// Cell
 		config.add(new Motion());
 		config.add(new Dot());

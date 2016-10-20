@@ -1,4 +1,4 @@
-package systems;
+package systems.generators;
 
 import ecx.System;
 import ecx.Wire;
