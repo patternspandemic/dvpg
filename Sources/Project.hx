@@ -66,6 +66,14 @@ class Project {
 		config.add(new Transform());
 		config.add(new Bounds());
 		config.add(new Site());
+		config.add(new Sites());
+		config.add(new Triangles());
+		config.add(new Region());
+		config.add(new Regions());
+		config.add(new Hull());
+		config.add(new Onion());
+		// MinSpanTree - array of line segments
+		// Cell
 		config.add(new Motion());
 		config.add(new Dot());
 
