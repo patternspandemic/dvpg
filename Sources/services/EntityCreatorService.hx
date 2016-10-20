@@ -20,6 +20,7 @@ class EntityCreatorService extends Service {
 	var _site: Wire<Site>;
 	var _sites: Wire<Sites>;
 	var _triangles: Wire<Triangles>;
+	var _triangulation: Wire<Triangulation>;
 	var _region: Wire<Region>;
 	var _regions: Wire<Regions>;
 	var _hull: Wire<Hull>;
@@ -71,6 +72,7 @@ class EntityCreatorService extends Service {
 		var entity: Entity = world.create();
 		_sites.create(entity);
 		_triangles.create(entity);
+		_triangulation.create(entity);
 		_regions.create(entity);
 		_hull.create(entity);
 		_onion.create(entity);

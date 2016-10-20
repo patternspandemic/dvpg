@@ -71,6 +71,7 @@ class Project {
 		config.add(new Site());
 		config.add(new Sites());
 		config.add(new Triangles());
+		config.add(new Triangulation());
 		config.add(new Region());
 		config.add(new Regions());
 		config.add(new Hull());
