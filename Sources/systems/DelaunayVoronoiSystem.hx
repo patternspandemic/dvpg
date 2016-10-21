@@ -11,6 +11,8 @@ import components.*;
 import components.types.AbstractFastVector2;
 
 import com.nodename.delaunay.Voronoi;
+import com.nodename.delaunay.Triangle;
+// import com.nodename.delaunay.Site;
 import com.nodename.geom.Point;
 import com.nodename.geom.LineSegment;
 
@@ -37,6 +39,7 @@ class DelaunayVoronoiSystem extends System {
 
 	public function new() {}
 
+	@:access(com.nodename.delaunay.Voronoi._triangles)
 	override function update(): Void {
 
 		// Get the bounds of the first and only bounded entity
@@ -70,14 +73,18 @@ class DelaunayVoronoiSystem extends System {
 			var region: Array<FastVector2>;
 			var allRegions: Array<Array<FastVector2>> = new Array<Array<FastVector2>>();
 			var triangles: Array<Array<FastVector2>>;
-			var allTriangles: Array<Array<FastVector2>> = new Array<Array<FastVector2>>();
+			var allTriangles: Array<Array<FastVector2>>; // = new Array<Array<FastVector2>>();
 			var includedEntity: Entity;
+
+			// TEMP - Entities acting as sites lack their own triangles.
+			allTriangles = _voronoi._triangles.map(triangleToArrayOfFastVector2);
+
 			for (i in 0...includedEntities.length) {
 				includedEntity = includedEntities[i]; // Alligned with points array
 
 				// Get its Point referenced region mapped to Region component type
 				region = _voronoi.region(points[i]).map(pointToFastVector2);
-				// Assign to the included entity's Region componnent if it has one
+				// Assign to the included entity's Region component if it has one
 				if (_region.has(includedEntity)) {
 					_region.get(includedEntity).regionMap.set(graphEntity.id, region);
 				}
@@ -85,18 +92,35 @@ class DelaunayVoronoiSystem extends System {
 				// graphEntity's Regions component
 				allRegions.push(region);
 
-				// TODO: Triangles require mods to hxDelaunay lib
-				// triangles = _voronoi.??..map(arrayOfPointToFastVector2);
-				// if (_triangles.has(includedEntity)) {
-				// 	_triangles.get(includedEntity).trianglesMap.set(graphEntity.id, triangles);
-				// }
+				// TODO
+				// triangles = _voronoi.triangles(points[i]).map(triangleToArrayOfFastVector2);
+
+				// TEMPORARY - Dig through allTriangles to find includedEntity's tris
+				// triangles = triangleFilter(allTriangles, AbstractFastVector2.fromPoint(points[i]));
+				var v: FastVector2 = AbstractFastVector2.fromPoint(points[i]);
+				triangles = allTriangles.filter(function(t: Array<FastVector2>) {
+					var res: Bool = false;
+					for (tv in t) {
+						if (tv.x == v.x && tv.y == v.y) {
+							res = true;
+							break;
+						}
+					}
+					return res;
+				});
+
+				// Assign to the includedEntity's Triangles component if it has one
+				if (_triangles.has(includedEntity)) {
+					_triangles.get(includedEntity).trianglesMap.set(graphEntity.id, triangles);
+				}
 				// And push to the collection of allTriangles to be assigned to
 				// graphEntity's Triangles component
 				// allTriangles.push(triangles);
 			}
+
 			// Assign collections of all regions and triangles to the graphEntity
 			_regions.set(graphEntity, allRegions);
-			// _triangles.get(graphEntity).trianglesMap.set(graphEntity, allTriangles); // Non-optimized for graph entities
+			_triangles.get(graphEntity).trianglesMap.set(graphEntity.id, allTriangles); // Non-optimized for graph entities
 
 		// Gather _voronoi.delaunayTriangulation and map to _triangulation component (new component required)
 
@@ -107,6 +131,14 @@ class DelaunayVoronoiSystem extends System {
 		// Calculate the onion and assign to _onions component
 
 		}
+	}
+
+	private function triangleToArrayOfFastVector2(tri: Triangle): Array<FastVector2> {
+		var result: Array<FastVector2> = new Array<FastVector2>();
+		for (s in tri.sites) {
+			result.push(AbstractFastVector2.fromPoint(s.coord));
+		}
+		return result;
 	}
 
 	private inline function arrayOfPointToFastVector2(points: Array<Point>): Array<FastVector2> {

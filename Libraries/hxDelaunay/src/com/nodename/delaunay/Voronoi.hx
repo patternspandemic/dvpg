@@ -332,8 +332,7 @@ class Voronoi {
 				var bottomSite = leftRegion(lbnd);
 				var topSite = rightRegion(rbnd);
 				// these three sites define a Delaunay triangle
-				// (not actually using these for anything...)
-				//_triangles.push(new Triangle(bottomSite, topSite, rightRegion(lbnd)));
+				_triangles.push(new Triangle(bottomSite, topSite, rightRegion(lbnd)));
 				
 				var v = lbnd.vertex;
 				v.setIndex();
