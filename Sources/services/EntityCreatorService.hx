@@ -40,6 +40,8 @@ class EntityCreatorService extends Service {
 		vel.y = vy;
 		_dot.create(entity).setup(color);
 		_site.create(entity).setTo(x, y);
+		_region.create(entity);
+		_triangles.create(entity);
 		world.commit(entity);
 		return entity;
 	}
