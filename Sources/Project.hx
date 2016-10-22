@@ -77,7 +77,8 @@ class Project {
 		config.add(new Hull());
 		config.add(new Onion());
 		config.add(new MinSpanTree());
-		// Circle?
+		config.add(new Circle());
+		config.add(new Circles());
 		// Cell
 		config.add(new Motion());
 		config.add(new Dot());

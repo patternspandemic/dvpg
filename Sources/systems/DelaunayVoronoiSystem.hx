@@ -15,22 +15,25 @@ import com.nodename.delaunay.Triangle;
 import com.nodename.geom.Point;
 import com.nodename.geom.LineSegment;
 import com.nodename.geom.Rectangle;
+import com.nodename.geom.Circle as GeomCircle;
 
 class DelaunayVoronoiSystem extends System {
 	
 	var _siteFamily: Family<Site>;
 	var _site: Wire<Site>;
+	var _region: Wire<Region>;
+	var _triangles: Wire<Triangles>;
+	var _circle: Wire<Circle>;
 
 	// How to make components optional for the family?
-	var _dualGraphFamily: Family<Sites, Triangles, Triangulation, Regions, Hull, Onion, MinSpanTree>; // Cell
+	var _dualGraphFamily: Family<Sites, Triangles, Triangulation, Regions, Hull, Onion, MinSpanTree, Circles>; // Cell
 	var _sites: Wire<Sites>;
-	var _triangles: Wire<Triangles>;
 	var _triangulation: Wire<Triangulation>;
-	var _region: Wire<Region>;
 	var _regions: Wire<Regions>;
 	var _hull: Wire<Hull>;
 	var _onion: Wire<Onion>;
 	var _minSpanTree: Wire<MinSpanTree>;
+	var _circles: Wire<Circles>;
 	//var _cells: Wire<Cell>;
 
 	var _boundsFamily: Family<Bounds>;
@@ -75,10 +78,14 @@ class DelaunayVoronoiSystem extends System {
 			var allRegions: Array<Array<FastVector2>> = new Array<Array<FastVector2>>();
 			var triangles: Array<Array<FastVector2>>;
 			var allTriangles: Array<Array<FastVector2>>; // = new Array<Array<FastVector2>>();
+			var circle: GeomCircle;
+			var allCircles: Array<GeomCircle>;
 			var includedEntity: Entity;
 
-			// TEMP - Entities acting as sites lack their own triangles.
+			// TEMP
 			allTriangles = _voronoi._triangles.map(triangleToArrayOfFastVector2);
+			// TEMP ?
+			allCircles = _voronoi.circles();
 
 			for (i in 0...includedEntities.length) {
 				includedEntity = includedEntities[i]; // Alligned with points array
@@ -117,11 +124,24 @@ class DelaunayVoronoiSystem extends System {
 				// And push to the collection of allTriangles to be assigned to
 				// graphEntity's Triangles component
 				// allTriangles.push(triangles);
+
+				// TEMPORARY - Dig through allCircles to find includedEntity's circle
+				var p: Point = points[i];
+				circle = allCircles.filter(function(c: GeomCircle) {
+					return (c.center.x == p.x && c.center.y == p.y);
+				}).pop();
+
+				if (circle != null && _circle.has(includedEntity)) {
+					_circle.get(includedEntity).circleMap.set(graphEntity.id, circle);
+					trace(circle.toString());
+				}
 			}
 
-			// Assign collections of all regions and triangles to the graphEntity
+			// Assign collections of all regions, triangles, and circles to the graphEntity
 			_regions.set(graphEntity, allRegions);
 			_triangles.get(graphEntity).trianglesMap.set(graphEntity.id, allTriangles); // Non-optimized for graph entities
+			_circles.set(graphEntity, allCircles);
+			trace(allCircles.length);
 
 			// Gather delaunay triangulation and map to _triangulation component on graphEntity
 			var triangulation: Array<Array<FastVector2>>;

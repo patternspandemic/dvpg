@@ -26,6 +26,8 @@ class EntityCreatorService extends Service {
 	var _hull: Wire<Hull>;
 	var _onion: Wire<Onion>;
 	var _minSpanTree: Wire<MinSpanTree>;
+	var _circle: Wire<Circle>;
+	var _circles: Wire<Circles>;
 	//var _cell: Wire<Cell>;
 
 	var _dot: Wire<Dot>;
@@ -42,6 +44,7 @@ class EntityCreatorService extends Service {
 		_site.create(entity).setTo(x, y);
 		_region.create(entity);
 		_triangles.create(entity);
+		_circle.create(entity);
 		world.commit(entity);
 		return entity;
 	}
@@ -79,6 +82,7 @@ class EntityCreatorService extends Service {
 		_hull.create(entity);
 		_onion.create(entity);
 		_minSpanTree.create(entity);
+		_circles.create(entity);
 		// _cell.create(entity);
 		return entity;
 	}
