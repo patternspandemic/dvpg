@@ -133,7 +133,6 @@ class DelaunayVoronoiSystem extends System {
 
 				if (circle != null && _circle.has(includedEntity)) {
 					_circle.get(includedEntity).circleMap.set(graphEntity.id, circle);
-					trace(circle.toString());
 				}
 			}
 
@@ -141,7 +140,6 @@ class DelaunayVoronoiSystem extends System {
 			_regions.set(graphEntity, allRegions);
 			_triangles.get(graphEntity).trianglesMap.set(graphEntity.id, allTriangles); // Non-optimized for graph entities
 			_circles.set(graphEntity, allCircles);
-			trace(allCircles.length);
 
 			// Gather delaunay triangulation and map to _triangulation component on graphEntity
 			var triangulation: Array<Array<FastVector2>>;

@@ -4,10 +4,13 @@ import ecx.Service;
 
 import kha.System;
 import kha.Framebuffer;
+import kha.Color;
 import kha.Image;
 import kha.Scaler;
 import kha.Assets;
 import kha.math.FastMatrix3;
+import kha.math.FastVector2;
+// import kha.graphics4.TextureFormat;
 
 class KhaRenderService extends Service {
 

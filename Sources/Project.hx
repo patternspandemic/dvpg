@@ -12,6 +12,7 @@ import components.*;
 import services.*;
 import systems.*;
 import systems.generators.*;
+import systems.renderers.*;
 
 class Project {
 
@@ -36,8 +37,14 @@ class Project {
 		var stateMachines:Int = 5;
 		var behavior:Int = 6;
 		var animate:Int = 7;
-		var render:Int = 8;
-		var gui:Int = 9;
+		var renderA:Int = 10;
+		var renderB:Int = 11;
+		var renderC:Int = 12;
+		var renderD:Int = 13;
+		var renderE:Int = 14;
+		var renderF:Int = 15;
+		var renderG:Int = 16;
+		var gui:Int = 20;
 
 		// Kha Services & Systems
 		config.add(new KhaUpdateService());
@@ -59,7 +66,16 @@ class Project {
 		config.add(new SiteSystem(), update);
 		config.add(new DelaunayVoronoiSystem(), update);
 		config.add(new MotionSystem(), move);
-		config.add(new RenderDotSystem(), render);
+
+		config.add(new RenderBackgroundSystem(), renderA);
+		config.add(new RenderRegionsSystem(), renderB);
+		config.add(new RenderCirclesSystem(), renderC);
+		config.add(new RenderOnionSystem(), renderD);
+		config.add(new RenderTriangulationSystem(), renderE);
+		config.add(new RenderMinSpanTreeSystem(), renderF);
+		config.add(new RenderHullSystem(), renderF);
+		config.add(new RenderDotSystem(), renderG);
+
 		config.add(new GuiSystem(), gui);
 		config.add(new StatsSystem(), 1000);
 

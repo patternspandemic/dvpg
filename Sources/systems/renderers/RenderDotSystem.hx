@@ -1,4 +1,4 @@
-package systems;
+package systems.renderers;
 
 import ecx.Wire;
 import ecx.System;
@@ -13,7 +13,7 @@ import core.KhaRenderService;
 import components.*;
 
 class RenderDotSystem extends System {
-	
+
 	var _entities:Family<Transform, Dot>;
 	var _transform:Wire<Transform>;
 	var _dot:Wire<Dot>;
@@ -27,7 +27,7 @@ class RenderDotSystem extends System {
 		var c:Color;
 		var graphics:Graphics = _krs.canvas.g2;
 
-		graphics.begin(true, Color.fromValue(0xFF444444));
+		graphics.begin(false);
 		for (entity in _entities) {
 			transform = _transform.get(entity).transform;
 			c = _dot.get(entity).color;
