@@ -2,6 +2,6 @@ package components;
 
 import ecx.AutoComp;
 
-import components.types.AbstractFastVector2;
+import kha.math.FastVector2;
 
-class Onion extends AutoComp<Array<Array<AbstractFastVector2>>> {}
+class Onion extends AutoComp<Array<Array<FastVector2>>> {}

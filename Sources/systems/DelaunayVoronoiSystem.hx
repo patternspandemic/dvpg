@@ -8,13 +8,13 @@ import ecx.Entity;
 import kha.math.FastVector2;
 
 import components.*;
-import components.types.AbstractFastVector2;
+import components.types.AbstractFastVector2; // TODO: Remove abstract
 
 import com.nodename.delaunay.Voronoi;
 import com.nodename.delaunay.Triangle;
-// import com.nodename.delaunay.Site;
 import com.nodename.geom.Point;
 import com.nodename.geom.LineSegment;
+import com.nodename.geom.Rectangle;
 
 class DelaunayVoronoiSystem extends System {
 	
@@ -22,14 +22,15 @@ class DelaunayVoronoiSystem extends System {
 	var _site: Wire<Site>;
 
 	// How to make components optional for the family?
-	var _dualGraphFamily: Family<Sites, Triangles, Regions, Hull, Onion, MinSpanTree>; // Cell
+	var _dualGraphFamily: Family<Sites, Triangles, Triangulation, Regions, Hull, Onion, MinSpanTree>; // Cell
 	var _sites: Wire<Sites>;
 	var _triangles: Wire<Triangles>;
+	var _triangulation: Wire<Triangulation>;
 	var _region: Wire<Region>;
 	var _regions: Wire<Regions>;
-	var _hulls: Wire<Hull>;
-	var _onions: Wire<Onion>;
-	var _minSpanTrees: Wire<MinSpanTree>;
+	var _hull: Wire<Hull>;
+	var _onion: Wire<Onion>;
+	var _minSpanTree: Wire<MinSpanTree>;
 	//var _cells: Wire<Cell>;
 
 	var _boundsFamily: Family<Bounds>;
@@ -43,7 +44,7 @@ class DelaunayVoronoiSystem extends System {
 	override function update(): Void {
 
 		// Get the bounds of the first and only bounded entity
-		var bounds = _bounds.get(_boundsFamily.get(0));
+		var bounds: Rectangle = _bounds.get(_boundsFamily.get(0));
 
 		for (graphEntity in _dualGraphFamily) {
 
@@ -55,7 +56,7 @@ class DelaunayVoronoiSystem extends System {
 			for (sitedEntity in _siteFamily) {
 				if (!sites.excluded.has(sitedEntity.id)) {
 					// sitedEntity should be included, and its Point pushed to
-					// the collection to be passed to Voronnoi. 
+					// the collection to be passed to Voronoi.
 					sites.included.set(sitedEntity.id);
 					includedEntities.push(sitedEntity);
 					points.push(_site.get(sitedEntity));
@@ -122,14 +123,25 @@ class DelaunayVoronoiSystem extends System {
 			_regions.set(graphEntity, allRegions);
 			_triangles.get(graphEntity).trianglesMap.set(graphEntity.id, allTriangles); // Non-optimized for graph entities
 
-		// Gather _voronoi.delaunayTriangulation and map to _triangulation component (new component required)
+			// Gather delaunay triangulation and map to _triangulation component on graphEntity
+			var triangulation: Array<Array<FastVector2>>;
+			triangulation = _voronoi.delaunayTriangulation().map(lineSegmentToArrayOfFastVector2);
+			_triangulation.set(graphEntity, triangulation);
 
-		// Gather _voronoi.hull and map to _hulls component
+			// Gather hull and map to _hulls component on graphEntity
+			var hull: Array<FastVector2>;
+			hull = _voronoi.hullPointsInOrder().map(pointToFastVector2);
+			_hull.set(graphEntity, hull);
 
-		// Gather _voronoi.spanningTree and map to _minSpanTrees component
+			// Gather spanningTree and map to _minSpanTree component on graphEntity
+			var mst: Array<Array<FastVector2>>;
+			mst = _voronoi.spanningTree().map(lineSegmentToArrayOfFastVector2);
+			_minSpanTree.set(graphEntity, mst);
 
-		// Calculate the onion and assign to _onions component
-
+			// Generate the onion and assign to _onion component on graphEntity
+			var onion: Array<Array<FastVector2>>;
+			onion = generateOnion(_voronoi, bounds);
+			_onion.set(graphEntity, onion);
 		}
 	}
 
@@ -145,7 +157,32 @@ class DelaunayVoronoiSystem extends System {
 		return points.map(pointToFastVector2);
 	}
 
+	private inline function lineSegmentToArrayOfFastVector2(line: LineSegment): Array<FastVector2> {
+		return [
+			pointToFastVector2(line.p0),
+			pointToFastVector2(line.p1)
+		];
+	}
+
 	private inline function pointToFastVector2(p: Point): FastVector2 {
 		return AbstractFastVector2.fromPoint(p);
+	}
+
+	private function generateOnion(voronoi: Voronoi, bounds: Rectangle): Array<Array<FastVector2>> {
+		var onion = new Array<Array<Point>>();
+		var points = voronoi.siteCoords();
+
+		while (points.length > 2) {
+			var v: Voronoi = new Voronoi(points, null, bounds);
+			var peel: Array<Point> = v.hullPointsInOrder();
+			for (p in peel) points.remove(p);
+			onion.push(peel);
+			v.dispose();
+			v = null;
+		}
+
+		if (points.length > 0) onion.push(points);
+
+		return onion.map(arrayOfPointToFastVector2);
 	}
 }
