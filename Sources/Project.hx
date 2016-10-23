@@ -69,11 +69,11 @@ class Project {
 
 		config.add(new RenderBackgroundSystem(), renderA);
 		config.add(new RenderRegionsSystem(), renderB);
-		config.add(new RenderCirclesSystem(), renderC);
-		config.add(new RenderOnionSystem(), renderD);
-		config.add(new RenderTriangulationSystem(), renderE);
+		config.add(new RenderCirclesSystem(), renderB);
+		config.add(new RenderOnionSystem(), renderC);
+		config.add(new RenderTriangulationSystem(), renderD);
+		config.add(new RenderHullSystem(), renderE);
 		config.add(new RenderMinSpanTreeSystem(), renderF);
-		config.add(new RenderHullSystem(), renderF);
 		config.add(new RenderDotSystem(), renderG);
 
 		config.add(new GuiSystem(), gui);

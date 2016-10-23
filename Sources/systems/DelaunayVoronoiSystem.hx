@@ -8,6 +8,7 @@ import ecx.Entity;
 import kha.math.FastVector2;
 
 import components.*;
+import components.Sites.SitesData;
 import components.types.AbstractFastVector2; // TODO: Remove abstract
 
 import com.nodename.delaunay.Voronoi;
@@ -49,12 +50,29 @@ class DelaunayVoronoiSystem extends System {
 		// Get the bounds of the first and only bounded entity
 		var bounds: Rectangle = _bounds.get(_boundsFamily.get(0));
 
+		var points: Array<Point>;
+		var sites: SitesData;
+		var includedEntities: Array<Entity>;
+		var includedEntity: Entity;
+
+		var region: Array<FastVector2>;
+		var allRegions: Array<Array<FastVector2>>;
+		var triangles: Array<Array<FastVector2>>;
+		var allTriangles: Array<Array<FastVector2>>; // = new Array<Array<FastVector2>>();
+		var triangulation: Array<Array<FastVector2>>;
+		var circle: GeomCircle;
+		var allCircles: Array<GeomCircle>;
+		var hull: Array<FastVector2>;
+		var onion: Array<Array<FastVector2>>;
+		var mst: Array<Array<FastVector2>>;
+
 		for (graphEntity in _dualGraphFamily) {
 
 			// Gather site Points, record site entity ids into sites component
-			var points: Array<Point> = new Array<Point>(); 
-			var sites = _sites.get(graphEntity); // Sites component of graphEntity
-			var includedEntities: Array<Entity> = new Array<Entity>();
+			points = new Array<Point>();
+			sites = _sites.get(graphEntity); // Sites component of graphEntity
+			includedEntities = new Array<Entity>();
+
 			sites.included.clear(); // Clear previous frame's included site entities
 			for (sitedEntity in _siteFamily) {
 				if (!sites.excluded.has(sitedEntity.id)) {
@@ -74,14 +92,7 @@ class DelaunayVoronoiSystem extends System {
 			_voronoi = new Voronoi(points, null, bounds);
 
 			// Gather _voronoi regions & triangles, map to respective components
-			var region: Array<FastVector2>;
-			var allRegions: Array<Array<FastVector2>> = new Array<Array<FastVector2>>();
-			var triangles: Array<Array<FastVector2>>;
-			var allTriangles: Array<Array<FastVector2>>; // = new Array<Array<FastVector2>>();
-			var circle: GeomCircle;
-			var allCircles: Array<GeomCircle>;
-			var includedEntity: Entity;
-
+			allRegions = new Array<Array<FastVector2>>();
 			// TEMP
 			allTriangles = _voronoi._triangles.map(triangleToArrayOfFastVector2);
 			// TEMP ?
@@ -94,6 +105,8 @@ class DelaunayVoronoiSystem extends System {
 				region = _voronoi.region(points[i]).map(pointToFastVector2);
 				// Assign to the included entity's Region component if it has one
 				if (_region.has(includedEntity)) {
+					// TODO: Abstract unset / set into component set method (allowing for n val/key)
+					_region.get(includedEntity).regionMap.unset(graphEntity.id);
 					_region.get(includedEntity).regionMap.set(graphEntity.id, region);
 				}
 				// And push to the collection of allRegions to be assigned to
@@ -119,6 +132,8 @@ class DelaunayVoronoiSystem extends System {
 
 				// Assign to the includedEntity's Triangles component if it has one
 				if (_triangles.has(includedEntity)) {
+					// TODO: Abstract unset / set into component set method (allowing for n val/key)
+					_triangles.get(includedEntity).trianglesMap.unset(graphEntity.id);
 					_triangles.get(includedEntity).trianglesMap.set(graphEntity.id, triangles);
 				}
 				// And push to the collection of allTriangles to be assigned to
@@ -132,32 +147,32 @@ class DelaunayVoronoiSystem extends System {
 				}).pop();
 
 				if (circle != null && _circle.has(includedEntity)) {
+					// TODO: Abstract unset / set into component set method (allowing for n val/key)
+					_circle.get(includedEntity).circleMap.unset(graphEntity.id);
 					_circle.get(includedEntity).circleMap.set(graphEntity.id, circle);
 				}
 			}
 
 			// Assign collections of all regions, triangles, and circles to the graphEntity
 			_regions.set(graphEntity, allRegions);
+			// TODO: Abstract unset / set into component set method (allowing for n val/key)
+			_triangles.get(graphEntity).trianglesMap.unset(graphEntity.id);
 			_triangles.get(graphEntity).trianglesMap.set(graphEntity.id, allTriangles); // Non-optimized for graph entities
 			_circles.set(graphEntity, allCircles);
 
 			// Gather delaunay triangulation and map to _triangulation component on graphEntity
-			var triangulation: Array<Array<FastVector2>>;
 			triangulation = _voronoi.delaunayTriangulation().map(lineSegmentToArrayOfFastVector2);
 			_triangulation.set(graphEntity, triangulation);
 
 			// Gather hull and map to _hulls component on graphEntity
-			var hull: Array<FastVector2>;
 			hull = _voronoi.hullPointsInOrder().map(pointToFastVector2);
 			_hull.set(graphEntity, hull);
 
 			// Gather spanningTree and map to _minSpanTree component on graphEntity
-			var mst: Array<Array<FastVector2>>;
 			mst = _voronoi.spanningTree().map(lineSegmentToArrayOfFastVector2);
 			_minSpanTree.set(graphEntity, mst);
 
 			// Generate the onion and assign to _onion component on graphEntity
-			var onion: Array<Array<FastVector2>>;
 			onion = generateOnion(_voronoi, bounds);
 			_onion.set(graphEntity, onion);
 		}
