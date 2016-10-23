@@ -20,26 +20,40 @@ class RenderOnionSystem extends System {
 	var _entities: Family<Onion>;
 	var _onion: Wire<Onion>;
 
+	var _keysEntities:Family<Keys>;
+	var _keys:Wire<Keys>;
+
 	var _krs: Wire<KhaRenderService>;
+
+	var _draw: Bool = false;
 
 	public function new() {}
 
 	override function update(): Void {
-		var c: Color;
-		var graphics: Graphics = _krs.canvas.g2;
 
-		graphics.begin(false);
-
-		c = graphics.color;
-		graphics.color = Color.fromValue(0xFF772266);
-		for (entity in _entities) {
-			var onion: Array<Array<FastVector2>> = _onion.get(entity);
-			for (ring in onion) {
-				graphics.drawPolygon(0, 0, ring.map(function(fv: FastVector2) { return new Vector2(fv.x, fv.y); }), 4.0);
-			}
+		// Toggle drawing with 'o' key up
+		var keys = _keys.get(_keysEntities.get(0));
+		if (keys.upKeys.has("o".code)) {
+			this._draw = !this._draw;
 		}
-		graphics.color = c;
 
-		graphics.end();
+		if (this._draw) {
+			var c: Color;
+			var graphics: Graphics = _krs.canvas.g2;
+
+			graphics.begin(false);
+
+			c = graphics.color;
+			graphics.color = Color.fromValue(0xFF772266);
+			for (entity in _entities) {
+				var onion: Array<Array<FastVector2>> = _onion.get(entity);
+				for (ring in onion) {
+					graphics.drawPolygon(0, 0, ring.map(function(fv: FastVector2) { return new Vector2(fv.x, fv.y); }), 4.0);
+				}
+			}
+			graphics.color = c;
+
+			graphics.end();
+		}
 	}
 }

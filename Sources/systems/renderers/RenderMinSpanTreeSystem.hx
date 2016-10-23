@@ -20,26 +20,40 @@ class RenderMinSpanTreeSystem extends System {
 	var _entities: Family<MinSpanTree>;
 	var _minSpanTree: Wire<MinSpanTree>;
 
+	var _keysEntities:Family<Keys>;
+	var _keys:Wire<Keys>;
+
 	var _krs: Wire<KhaRenderService>;
+
+	var _draw: Bool = false;
 
 	public function new() {}
 
 	override function update(): Void {
-		var c: Color;
-		var graphics: Graphics = _krs.canvas.g2;
 
-		graphics.begin(false);
-
-		c = graphics.color;
-		graphics.color = Color.fromValue(0xFFFFFFFF);
-		for (entity in _entities) {
-			var minSpanTree: Array<Array<FastVector2>> = _minSpanTree.get(entity);
-			for (line in minSpanTree) {
-				graphics.drawLine(line[0].x, line[0].y, line[1].x, line[1].y, 3.0);
-			}
+		// Toggle drawing with 'm' key up
+		var keys = _keys.get(_keysEntities.get(0));
+		if (keys.upKeys.has("m".code)) {
+			this._draw = !this._draw;
 		}
-		graphics.color = c;
 
-		graphics.end();
+		if (this._draw) {
+			var c: Color;
+			var graphics: Graphics = _krs.canvas.g2;
+
+			graphics.begin(false);
+
+			c = graphics.color;
+			graphics.color = Color.fromValue(0xFFFFFFFF);
+			for (entity in _entities) {
+				var minSpanTree: Array<Array<FastVector2>> = _minSpanTree.get(entity);
+				for (line in minSpanTree) {
+					graphics.drawLine(line[0].x, line[0].y, line[1].x, line[1].y, 3.0);
+				}
+			}
+			graphics.color = c;
+
+			graphics.end();
+		}
 	}
 }

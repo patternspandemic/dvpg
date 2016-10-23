@@ -22,26 +22,40 @@ class RenderCirclesSystem extends System {
 	var _entities: Family<Circles>;
 	var _circles: Wire<Circles>;
 
+	var _keysEntities:Family<Keys>;
+	var _keys:Wire<Keys>;
+
 	var _krs: Wire<KhaRenderService>;
+
+	var _draw: Bool = false;
 
 	public function new() {}
 
 	override function update(): Void {
-		var c: Color;
-		var graphics: Graphics = _krs.canvas.g2;
 
-		graphics.begin(false);
-
-		c = graphics.color;
-		graphics.color = Color.fromValue(0xFF222222);
-		for (entity in _entities) {
-			var circles: Array<GeomCircle> = _circles.get(entity);
-			for (circle in circles) {
-				graphics.fillCircle(circle.center.x, circle.center.y, circle.radius);
-			}
+		// Toggle drawing with 'c' key up
+		var keys = _keys.get(_keysEntities.get(0));
+		if (keys.upKeys.has("c".code)) {
+			this._draw = !this._draw;
 		}
-		graphics.color = c;
 
-		graphics.end();
+		if (this._draw) {
+			var c: Color;
+			var graphics: Graphics = _krs.canvas.g2;
+
+			graphics.begin(false);
+
+			c = graphics.color;
+			graphics.color = Color.fromValue(0xFF222222);
+			for (entity in _entities) {
+				var circles: Array<GeomCircle> = _circles.get(entity);
+				for (circle in circles) {
+					graphics.fillCircle(circle.center.x, circle.center.y, circle.radius);
+				}
+			}
+			graphics.color = c;
+
+			graphics.end();
+		}
 	}
 }

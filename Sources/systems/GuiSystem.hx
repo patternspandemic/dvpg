@@ -32,6 +32,7 @@ class GuiSystem extends System {
 	}
 
 	override function update(): Void {
+
 		// There's really only one keys entity here
 		for (entity in _keysEntities) {
 			var keys = _keys.get(entity);
@@ -52,7 +53,7 @@ class GuiSystem extends System {
 			if (_ui.window(_winId, 0, 0, Std.int(Project.width / 4), Project.height, Zui.LAYOUT_VERTICAL)) {
 
 				// Stats
-				if (_ui.node(Id.node(), "Stats", 2, false)) {
+				if (_ui.node(Id.node(), "Stats", 1, false)) {
 					_ui.row([3/10, 2/10, 2/10, 3/10]);
 					_ui.text("" + _stats.dt, Zui.ALIGN_CENTER);
 					_ui.text("< DT");
@@ -102,7 +103,10 @@ class GuiSystem extends System {
 
 				_ui.separator();
 
-				// Next node...
+				// Global Delaunay Voronoi Graphic
+				if (_ui.node(Id.node(), "Global Graph", 1, true)) {
+
+				}
 			}
 
 			_ui.end();

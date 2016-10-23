@@ -38,14 +38,15 @@ class StatsSystem extends System {
 		_runner.profile = this.profile;
 
 		// There's really only one keys entity here
-		for (entity in _keysEntities) {
-			var keys = _keys.get(entity);
+//		for (entity in _keysEntities) {
+//			var keys = _keys.get(entity);
+			var keys = _keys.get(_keysEntities.get(0));
 			// Toggle profilling with ` key
 			if (keys.upKeys.has("`".code)) {
 				this.profile = !this.profile;
 				_runner.profile = this.profile;
 			}
-		}
+//		}
 
 		// Update fps and dt
 		this.fps = formatD2(_fpsMeter.framesPerSecond);
