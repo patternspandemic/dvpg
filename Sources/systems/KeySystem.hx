@@ -4,7 +4,7 @@ import ecx.Wire;
 import ecx.System;
 import ecx.Family;
 
-import services.EntityCreatorService;
+import services.NamedEntityService;
 
 import de.polygonal.ds.BitVector;
 
@@ -28,12 +28,8 @@ using haxe.EnumTools.EnumValueTools;
  */
 class KeySystem extends System {
 
-	// The keys family of entity
-	var _keysEntities:Family<Keys>;
+	var _namedEntities: Wire<NamedEntityService>;
 	var _keys:Wire<Keys>;
-
-	// For creating a keys entity
-	var _creator:Wire<EntityCreatorService>;
 
 	// Keys related system state
 	var _downKeys:BitVector;
@@ -52,48 +48,40 @@ class KeySystem extends System {
 	}
 
 	override function update(): Void {
-		// Make sure we have a keys entity.
-		if (_keysEntities.length == 0) {
-			_creator.createKeys();
-			return;
+		// Get the keys component attached to the 'Keys' entity
+		var keys = _keys.get(_namedEntities.get('Keys'));
+		var prevFrameDown:Bytes;
+		var curFrameDown:Bytes;
+		var curFrameUp:Bytes;
+		var b:Int;
+
+		prevFrameDown = Bytes.ofData(keys.downKeys.toBytes());
+		curFrameDown = Bytes.ofData(_downKeys.toBytes());
+		curFrameUp = Bytes.ofData(_upKeys.toBytes());
+
+		// For each byte ...
+		for (b in 0...curFrameDown.length) {
+			// Combine set down bits of this and previous frame
+			curFrameDown.set(b, prevFrameDown.get(b) | curFrameDown.get(b));
+			// But clear the down bits that are now up.
+			// FIXME: Key Up without Down: Note that it is
+			// possible for the corresponding down bit to be unset here
+			// on the same frame, thus other systems may only see an Up
+			// state.
+			curFrameDown.set(b, curFrameDown.get(b) & (~curFrameUp.get(b)));
 		}
 
-		// There's really only one keys entity here
-		for (entity in _keysEntities) {
-			var keys = _keys.get(entity);
-			var prevFrameDown:Bytes;
-			var curFrameDown:Bytes;
-			var curFrameUp:Bytes;
-			var b:Int;
+		// Assign the current frame's computed bits to the entity
+		keys.downKeys.ofBytes(curFrameDown.getData());
 
-			prevFrameDown = Bytes.ofData(keys.downKeys.toBytes());
-			curFrameDown = Bytes.ofData(_downKeys.toBytes());
-			curFrameUp = Bytes.ofData(_upKeys.toBytes());
+		// Remove previous frame's Up key state on the entity,
+		// then assign this frame's Up state.
+		keys.upKeys.clearAll(); // Neccessary?
+		keys.upKeys.ofBytes(curFrameUp.getData());
 
-			// For each byte ...
-			for (b in 0...curFrameDown.length) {
-				// Combine set down bits of this and previous frame
-				curFrameDown.set(b, prevFrameDown.get(b) | curFrameDown.get(b));
-				// But clear the down bits that are now up.
-				// FIXME: Key Up without Down: Note that it is
-				// possible for the corresponding down bit to be unset here
-				// on the same frame, thus other systems may only see an Up
-				// state.
-				curFrameDown.set(b, curFrameDown.get(b) & (~curFrameUp.get(b)));
-			}
-
-			// Assign the current frame's computed bits to the entity
-			keys.downKeys.ofBytes(curFrameDown.getData());
-
-			// Remove previous frame's Up key state on the entity,
-			// then assign this frame's Up state.
-			keys.upKeys.clearAll(); // Neccessary?
-			keys.upKeys.ofBytes(curFrameUp.getData());
-
-			// Clear this system's key states for the next update.
-			_downKeys.clearAll();
-			_upKeys.clearAll();
-		}
+		// Clear this system's key states for the next update.
+		_downKeys.clearAll();
+		_upKeys.clearAll();
 	}
 
 	function onKeyDown(key:Key, char:String): Void {

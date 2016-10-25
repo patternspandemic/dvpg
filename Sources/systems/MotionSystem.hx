@@ -11,16 +11,18 @@ import kha.math.FastVector2;
 
 import Project;
 
+import services.NamedEntityService;
+
 import components.*;
 
 class MotionSystem extends System {
-	
+
+	var _namedEntities: Wire<NamedEntityService>;
+	var _bounds: Wire<Bounds>;
+
 	var _entities:Family<Transform, Motion>;
 	var _transform:Wire<Transform>;
 	var _motion:Wire<Motion>;
-
-	var _boundedEntities: Family<Bounds>;
-	var _bounds: Wire<Bounds>;
 
 	var _time:Wire<TimeSystem>;
 
@@ -29,8 +31,7 @@ class MotionSystem extends System {
 	override function update(): Void {
 
 		// Get the bounds of the first and only bounded entity
-		var bounds = _bounds.get(_boundedEntities.get(0));
-
+		var bounds = _bounds.get(_namedEntities.get('Bounds'));
 		var trans;
 		var pos;
 		var vel;

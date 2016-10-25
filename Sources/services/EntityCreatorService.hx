@@ -15,6 +15,7 @@ class EntityCreatorService extends Service {
 	var _keys: Wire<Keys>;
 	var _transform: Wire<Transform>;
 	var _motion: Wire<Motion>;
+	var _settings: Wire<Settings>;
 	var _bounds: Wire<Bounds>;
 
 	var _site: Wire<Site>;
@@ -84,6 +85,13 @@ class EntityCreatorService extends Service {
 		_minSpanTree.create(entity);
 		_circles.create(entity);
 		// _cell.create(entity);
+		_settings.create(entity);
+		return entity;
+	}
+
+	public function createSettings(): Entity {
+		var entity: Entity = world.create();
+		_settings.create(entity);
 		return entity;
 	}
 }

@@ -9,24 +9,24 @@ import ecx.common.systems.TimeSystem;
 
 import kha.Key;
 
+import services.NamedEntityService;
+
 import components.*;
 
 class StatsSystem extends System {
 
-	var _keysEntities:Family<Keys>;
-	var _keys:Wire<Keys>;
-
-	var _fpsMeter:Wire<FpsMeter>;
-	var _time:Wire<TimeSystem>;
-	var _runner:Wire<SystemRunner>;
+	var _namedEntities: Wire<NamedEntityService>;
+	var _settings: Wire<Settings>;
+	var _fpsMeter: Wire<FpsMeter>;
+	var _time: Wire<TimeSystem>;
+	var _runner: Wire<SystemRunner>;
 
 	var _clearMaps:Bool = false;
 
-	public var fps:Float = 0.0;
-	public var dt:Float = 0.0;
-	public var profile:Bool = false;
-	public var profiles:Map<String, SystemProfile>;
-	public var comps:Map<String, Int>;
+	public var fps: Float = 0.0;
+	public var dt: Float = 0.0;
+	public var profiles: Map<String, SystemProfile>;
+	public var comps: Map<String, Int>;
 
 	public function new() {
 		this.profiles = new Map<String, SystemProfile>();
@@ -34,25 +34,18 @@ class StatsSystem extends System {
 	}
 
 	override function update() {
-		// React to Gui button
-		_runner.profile = this.profile;
 
-		// There's really only one keys entity here
-//		for (entity in _keysEntities) {
-//			var keys = _keys.get(entity);
-			var keys = _keys.get(_keysEntities.get(0));
-			// Toggle profilling with ` key
-			if (keys.upKeys.has("`".code)) {
-				this.profile = !this.profile;
-				_runner.profile = this.profile;
-			}
-//		}
+		var globalSettings = _settings.get(_namedEntities.get('GlobalSettings'));
+		var profiling: Bool = globalSettings.get('profile');
+
+		// Observe global profile setting
+		_runner.profile = profiling;
 
 		// Update fps and dt
 		this.fps = formatD2(_fpsMeter.framesPerSecond);
 		this.dt = formatD2(_time.deltaTime * 1000);
 
-		if (this.profile) {
+		if (profiling) {
 
 			// Collect systems profile data
 			for (profile in _runner.profileData) {
@@ -94,8 +87,8 @@ class StatsSystem extends System {
 }
 
 typedef SystemProfile = {
-	var timing:Float;
-	var timingMax:Float;
-	var changed:Int;
-	var removed:Int;
+	var timing: Float;
+	var timingMax: Float;
+	var changed: Int;
+	var removed: Int;
 }

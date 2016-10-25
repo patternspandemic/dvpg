@@ -17,45 +17,35 @@ import components.*;
 
 class RenderCirclesSystem extends System {
 
-	// Delaunay / Voronoi entities would ideally also have component which
-	// specifies which things to draw, regions, triangulation, etc.
-	var _entities: Family<Circles>;
+	var _entities: Family<Circles, Settings>;
 	var _circles: Wire<Circles>;
-
-	var _keysEntities:Family<Keys>;
-	var _keys:Wire<Keys>;
+	var _settings: Wire<Settings>;
 
 	var _krs: Wire<KhaRenderService>;
-
-	var _draw: Bool = false;
 
 	public function new() {}
 
 	override function update(): Void {
 
-		// Toggle drawing with 'c' key up
-		var keys = _keys.get(_keysEntities.get(0));
-		if (keys.upKeys.has("c".code)) {
-			this._draw = !this._draw;
-		}
+		var c: Color;
+		var graphics: Graphics = _krs.canvas.g2;
 
-		if (this._draw) {
-			var c: Color;
-			var graphics: Graphics = _krs.canvas.g2;
+		graphics.begin(false);
 
-			graphics.begin(false);
+		c = graphics.color;
+		graphics.color = Color.fromValue(0xFF222222);
 
-			c = graphics.color;
-			graphics.color = Color.fromValue(0xFF222222);
-			for (entity in _entities) {
+		for (entity in _entities) {
+			if (_settings.get(entity).get('renderCircles')) {
 				var circles: Array<GeomCircle> = _circles.get(entity);
 				for (circle in circles) {
 					graphics.fillCircle(circle.center.x, circle.center.y, circle.radius);
 				}
 			}
-			graphics.color = c;
-
-			graphics.end();
 		}
+
+		graphics.color = c;
+
+		graphics.end();
 	}
 }

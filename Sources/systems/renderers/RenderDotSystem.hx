@@ -3,39 +3,37 @@ package systems.renderers;
 import ecx.Wire;
 import ecx.System;
 import ecx.Family;
+import ecx.Entity;
 
 import kha.Color;
 import kha.math.FastMatrix3;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
 
+import services.NamedEntityService;
+
 import core.KhaRenderService;
 import components.*;
 
 class RenderDotSystem extends System {
 
-	var _entities:Family<Transform, Dot>;
-	var _transform:Wire<Transform>;
-	var _dot:Wire<Dot>;
+	var _namedEntities: Wire<NamedEntityService>;
 
-	var _keysEntities:Family<Keys>;
-	var _keys:Wire<Keys>;
+	var _entities: Family<Transform, Dot>; // Site enities need settings?
+	var _transform: Wire<Transform>;
+	var _dot: Wire<Dot>;
 
-	var _krs:Wire<KhaRenderService>;
+	var _settings: Wire<Settings>;
 
-	var _draw: Bool = true;
+	var _krs: Wire<KhaRenderService>;
 
 	public function new() {}
 
 	override function update(): Void {
 
-		// Toggle drawing with 's' key up
-		var keys = _keys.get(_keysEntities.get(0));
-		if (keys.upKeys.has("s".code)) {
-			this._draw = !this._draw;
-		}
+		var globalGraphSettings = _settings.get(_namedEntities.get('GlobalGraph'));
 
-		if (this._draw) {
+		if (globalGraphSettings.get('renderSites')) {
 			var transform: FastMatrix3;
 			var c: Color;
 			var prevC: Color;
@@ -45,6 +43,7 @@ class RenderDotSystem extends System {
 			prevC = graphics.color;
 
 			for (entity in _entities) {
+				// TODO: Per site draw check
 				transform = _transform.get(entity).transform;
 				c = _dot.get(entity).color;
 				graphics.pushTransformation(graphics.transformation.multmat(transform));

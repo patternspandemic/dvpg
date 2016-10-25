@@ -7,6 +7,8 @@ import ecx.Entity;
 
 import kha.math.FastVector2;
 
+import services.NamedEntityService;
+
 import components.*;
 import components.Sites.SitesData;
 import components.types.AbstractFastVector2; // TODO: Remove abstract
@@ -20,6 +22,8 @@ import com.nodename.geom.Circle as GeomCircle;
 
 class DelaunayVoronoiSystem extends System {
 	
+	var _namedEntities: Wire<NamedEntityService>;
+
 	var _siteFamily: Family<Site>;
 	var _site: Wire<Site>;
 	var _region: Wire<Region>;
@@ -37,7 +41,6 @@ class DelaunayVoronoiSystem extends System {
 	var _circles: Wire<Circles>;
 	//var _cells: Wire<Cell>;
 
-	var _boundsFamily: Family<Bounds>;
 	var _bounds: Wire<Bounds>;
 
 	var _voronoi: Voronoi;
@@ -47,8 +50,8 @@ class DelaunayVoronoiSystem extends System {
 	@:access(com.nodename.delaunay.Voronoi._triangles)
 	override function update(): Void {
 
-		// Get the bounds of the first and only bounded entity
-		var bounds: Rectangle = _bounds.get(_boundsFamily.get(0));
+		// Get the bounds named 'Bounds'
+		var bounds: Rectangle = _bounds.get(_namedEntities.get('Bounds'));
 
 		var points: Array<Point>;
 		var sites: SitesData;

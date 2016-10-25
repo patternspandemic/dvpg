@@ -4,7 +4,7 @@ import ecx.Wire;
 import ecx.System;
 import ecx.Family;
 
-import services.EntityCreatorService;
+import services.NamedEntityService;
 
 import de.polygonal.ds.IntHashTable;
 
@@ -13,12 +13,8 @@ import components.Mouse.MouseButtonState;
 
 class MouseSystem extends System {
 
-	// The mouse family of entity
-	var _mouseEntities:Family<Mouse>;
+	var _namedEntities: Wire<NamedEntityService>;
 	var _mouse:Wire<Mouse>;
-
-	// For creating a mouse entity
-	var _creator:Wire<EntityCreatorService>;
 
 	// Mouse related system state
 	var _x:Int;
@@ -43,45 +39,35 @@ class MouseSystem extends System {
 	}
 
 	override function update(): Void {
-		// Make sure we have a mouse entity.
-		if (_mouseEntities.length == 0) {
-			if (_x != 0 && _y != 0) {
-				_creator.createMouse(_x, _y, _dx, _dy);
+		// Get the mouse component attached to the 'Mouse' entity
+		var mouse = _mouse.get(_namedEntities.get('Mouse'));
+
+		// Remove previous frame's UP button
+		// states on the entity
+		for (k in mouse.buttons.keys()){
+			switch mouse.buttons.get(k) {
+				case Up(_, _):
+					mouse.buttons.unset(k);
+				case _:
+					// Down states stay, are replaced by UPs
 			}
-			return;
 		}
 
-		// There's really only one mouse here
-		for (entity in _mouseEntities) {
-			var mouse = _mouse.get(entity);
-
-			// Remove previous frame's UP button
-			// states on the entity
-			for (k in mouse.buttons.keys()){
-				switch mouse.buttons.get(k) {
-					case Up(_, _):
-						mouse.buttons.unset(k);
-					case _:
-						// Down states stay, are replaced by UPs
-				}
-			}
-
-			// Set this frame's states
-			for (k in _buttons.keys()){
-				mouse.buttons.unset(k);
-				mouse.buttons.set(k, _buttons.get(k));
-				// and clear for next update
-				_buttons.unset(k);
-			}
-
-			// Set mouse position, motion, and wheel
-			mouse.position.x = _x;
-			mouse.position.y = _y;
-			mouse.changeInPosition.x = _dx;
-			mouse.changeInPosition.y = _dy;
-			mouse.wheel = _w;
-			_w = 0; // clear wheel for next update
+		// Set this frame's states
+		for (k in _buttons.keys()){
+			mouse.buttons.unset(k);
+			mouse.buttons.set(k, _buttons.get(k));
+			// and clear for next update
+			_buttons.unset(k);
 		}
+
+		// Set mouse position, motion, and wheel
+		mouse.position.x = _x;
+		mouse.position.y = _y;
+		mouse.changeInPosition.x = _dx;
+		mouse.changeInPosition.y = _dy;
+		mouse.wheel = _w;
+		_w = 0; // clear wheel for next update
 	}
 
 	function onMouseDown(button:Int, x:Int, y:Int): Void {
