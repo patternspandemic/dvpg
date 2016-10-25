@@ -26,6 +26,7 @@ class BoundsGeneratorSystem extends System {
 		// canvas origin, which should be center window.
 		var halfWidth = _krs.canvas.width / 2;
 		var halfHeight = _krs.canvas.height / 2;
+
 		var boundsEntity: Entity = _creator.createBounds();
 		var bounds = _bounds.get(boundsEntity);
 		bounds.setTo(
@@ -34,6 +35,16 @@ class BoundsGeneratorSystem extends System {
 			halfWidth * 2,
 			halfHeight * 2
 		);
-		_namedEntities.set('Bounds', boundsEntity);
+		_namedEntities.set('CanvasBounds', boundsEntity);
+
+		var insetBoundsEntity: Entity = _creator.createBounds();
+		var insetBounds = _bounds.get(insetBoundsEntity);
+		insetBounds.setTo(
+			Std.int(0.8 * halfWidth )* -1,
+			Std.int(0.8 * halfHeight) * -1,
+			Std.int(0.8 * halfWidth )* 2,
+			Std.int(0.8 * halfHeight) * 2
+		);
+		_namedEntities.set('InsetBounds', insetBoundsEntity);
 	}
 }

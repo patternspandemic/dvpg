@@ -51,7 +51,7 @@ class DelaunayVoronoiSystem extends System {
 	override function update(): Void {
 
 		// Get the bounds named 'Bounds'
-		var bounds: Rectangle = _bounds.get(_namedEntities.get('Bounds'));
+		var bounds: Rectangle = _bounds.get(_namedEntities.get('InsetBounds'));
 
 		var points: Array<Point>;
 		var sites: SitesData;

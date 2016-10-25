@@ -28,6 +28,7 @@ class GlobalGraphGeneratorSystem extends System {
 		settings.set('renderOnion', false);
 		settings.set('renderMinSpanTree', false);
 		settings.set('renderCircles', false);
+		settings.set('renderBounds', false);
 		_namedEntities.set('GlobalGraph', globalGraph);
 	}
 }

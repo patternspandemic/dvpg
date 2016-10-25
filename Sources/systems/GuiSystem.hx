@@ -38,6 +38,7 @@ class GuiSystem extends System {
 	var _globalGraph_RenderOnionCheckID: String;
 	var _globalGraph_RenderMinSpanTreeCheckID: String;
 	var _globalGraph_RenderCirclesCheckID: String;
+	var _globalGraph_RenderBoundsCheckID: String;
 
 	public function new() {
 		_ui = new Zui(Assets.fonts.HackRegular, 16, 14);
@@ -51,6 +52,7 @@ class GuiSystem extends System {
 		_globalGraph_RenderOnionCheckID = Id.check();
 		_globalGraph_RenderMinSpanTreeCheckID = Id.check();
 		_globalGraph_RenderCirclesCheckID = Id.check();
+		_globalGraph_RenderBoundsCheckID = Id.check();
 	}
 
 	override function update(): Void {
@@ -132,6 +134,7 @@ class GuiSystem extends System {
 					_ui.check(_globalGraph_RenderOnionCheckID, 'Onion', globalGraphSettings.get('renderOnion'));
 					_ui.check(_globalGraph_RenderMinSpanTreeCheckID, 'Min Span Tree', globalGraphSettings.get('renderMinSpanTree'));
 					_ui.check(_globalGraph_RenderCirclesCheckID, 'Circles', globalGraphSettings.get('renderCircles'));
+					_ui.check(_globalGraph_RenderBoundsCheckID, 'Bounds', globalGraphSettings.get('renderBounds'));
 					_ui.unindent();
 					_globalGraph_RenderStatesExist = true;
 				}
@@ -157,6 +160,7 @@ class GuiSystem extends System {
 			_ui.checkStates.get(_globalGraph_RenderOnionCheckID).selected = settings.get('renderOnion');
 			_ui.checkStates.get(_globalGraph_RenderMinSpanTreeCheckID).selected = settings.get('renderMinSpanTree');
 			_ui.checkStates.get(_globalGraph_RenderCirclesCheckID).selected = settings.get('renderCircles');
+			_ui.checkStates.get(_globalGraph_RenderBoundsCheckID).selected = settings.get('renderBounds');
 		}
 	}
 
@@ -169,6 +173,7 @@ class GuiSystem extends System {
 			settings.set('renderOnion', _ui.checkStates.get(_globalGraph_RenderOnionCheckID).selected);
 			settings.set('renderMinSpanTree', _ui.checkStates.get(_globalGraph_RenderMinSpanTreeCheckID).selected);
 			settings.set('renderCircles', _ui.checkStates.get(_globalGraph_RenderCirclesCheckID).selected);
+			settings.set('renderBounds', _ui.checkStates.get(_globalGraph_RenderBoundsCheckID).selected);
 		}
 	}
 }

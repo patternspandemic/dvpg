@@ -67,6 +67,11 @@ class KeyBindsSystem extends System {
 		if (keys.upKeys.has("c".code)) {
 			globalGraphSettings.set('renderCircles', !globalGraphSettings.get('renderCircles'));
 		}
+
+		// Render bounds toggle
+		if (keys.upKeys.has("b".code)) {
+			globalGraphSettings.set('renderBounds', !globalGraphSettings.get('renderBounds'));
+		}
 	}
 
 }

@@ -10,13 +10,14 @@ import kha.math.Vector2;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
 
+import services.NamedEntityService;
 import core.KhaRenderService;
 import components.*;
 
-class RenderRegionsSystem extends System {
+class RenderBoundsSystem extends System {
 
-	var _entities: Family<Regions, Settings>;
-	var _regions: Wire<Regions>;
+	var _namedEntities: Wire<NamedEntityService>;
+	var _bounds: Wire<Bounds>;
 	var _settings: Wire<Settings>;
 
 	var _krs: Wire<KhaRenderService>;
@@ -24,6 +25,9 @@ class RenderRegionsSystem extends System {
 	public function new() {}
 
 	override function update(): Void {
+
+		var bounds = _bounds.get(_namedEntities.get('InsetBounds'));
+		var globalGraphSettings = _settings.get(_namedEntities.get('GlobalGraph'));
 
 		var c: Color;
 		var graphics: Graphics = _krs.canvas.g2;
@@ -33,19 +37,13 @@ class RenderRegionsSystem extends System {
 		c = graphics.color;
 		graphics.color = Color.fromValue(0xFF222222);
 
-		for (entity in _entities) {
-			if (_settings.get(entity).get('renderRegions')) {
-				var regions: Array<Array<FastVector2>> = _regions.get(entity);
-				for (region in regions) {
-					if (region.length > 0) { // Don't draw empty regions
-						graphics.drawPolygon(0, 0, region.map(function(fv: FastVector2) { return new Vector2(fv.x, fv.y); }), 2.0);
-					}
-				}
-			}
+		if (globalGraphSettings.get('renderBounds')) {
+			graphics.drawRect(bounds.x, bounds.y, bounds.width, bounds.height, 3.0);
 		}
 
 		graphics.color = c;
 
 		graphics.end();
+
 	}
 }

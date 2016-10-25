@@ -31,7 +31,7 @@ class MotionSystem extends System {
 	override function update(): Void {
 
 		// Get the bounds of the first and only bounded entity
-		var bounds = _bounds.get(_namedEntities.get('Bounds'));
+		var bounds = _bounds.get(_namedEntities.get('CanvasBounds'));
 		var trans;
 		var pos;
 		var vel;
