@@ -43,6 +43,11 @@ class KeyBindsSystem extends System {
 			globalGraphSettings.set('renderRegions', !globalGraphSettings.get('renderRegions'));
 		}
 
+		// Render filled regions toggle
+		if (keys.upKeys.has("f".code)) {
+			globalGraphSettings.set('renderFilledRegions', !globalGraphSettings.get('renderFilledRegions'));
+		}
+
 		// Render triangulation toggle
 		if (keys.upKeys.has("t".code)) {
 			globalGraphSettings.set('renderTriangulation', !globalGraphSettings.get('renderTriangulation'));

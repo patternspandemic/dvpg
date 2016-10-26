@@ -23,6 +23,7 @@ class GlobalGraphGeneratorSystem extends System {
 		var settings = _settings.get(globalGraph);
 		settings.set('renderSites', true);
 		settings.set('renderRegions', false);
+		settings.set('renderFilledRegions', false);
 		settings.set('renderTriangulation', false);
 		settings.set('renderHull', false);
 		settings.set('renderOnion', false);

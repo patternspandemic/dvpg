@@ -33,6 +33,7 @@ class GuiSystem extends System {
 	var _globalGraph_RenderStatesExist: Bool;
 	var _globalGraph_RenderSitesCheckID: String;
 	var _globalGraph_RenderRegionsCheckID: String;
+	var _globalGraph_RenderFilledRegionsCheckID: String;
 	var _globalGraph_RenderTriangulationCheckID: String;
 	var _globalGraph_RenderHullCheckID: String;
 	var _globalGraph_RenderOnionCheckID: String;
@@ -47,6 +48,7 @@ class GuiSystem extends System {
 		_globalGraph_RenderStatesExist = false;
 		_globalGraph_RenderSitesCheckID = Id.check();
 		_globalGraph_RenderRegionsCheckID = Id.check();
+		_globalGraph_RenderFilledRegionsCheckID = Id.check();
 		_globalGraph_RenderTriangulationCheckID = Id.check();
 		_globalGraph_RenderHullCheckID = Id.check();
 		_globalGraph_RenderOnionCheckID = Id.check();
@@ -127,14 +129,17 @@ class GuiSystem extends System {
 				if (_ui.node(Id.node(), "Global Graph", 1, true)) {
 					_ui.indent();
 					_ui.text('Render:');
+					_ui.indent();
 					_ui.check(_globalGraph_RenderSitesCheckID, 'Sites', globalGraphSettings.get('renderSites'));
 					_ui.check(_globalGraph_RenderRegionsCheckID, 'Regions', globalGraphSettings.get('renderRegions'));
+					_ui.check(_globalGraph_RenderFilledRegionsCheckID, 'Filled Regions', globalGraphSettings.get('renderFilledRegions'));
 					_ui.check(_globalGraph_RenderTriangulationCheckID, 'Triangulation', globalGraphSettings.get('renderTriangulation'));
 					_ui.check(_globalGraph_RenderHullCheckID, 'Hull', globalGraphSettings.get('renderHull'));
 					_ui.check(_globalGraph_RenderOnionCheckID, 'Onion', globalGraphSettings.get('renderOnion'));
 					_ui.check(_globalGraph_RenderMinSpanTreeCheckID, 'Min Span Tree', globalGraphSettings.get('renderMinSpanTree'));
 					_ui.check(_globalGraph_RenderCirclesCheckID, 'Circles', globalGraphSettings.get('renderCircles'));
 					_ui.check(_globalGraph_RenderBoundsCheckID, 'Bounds', globalGraphSettings.get('renderBounds'));
+					_ui.unindent();
 					_ui.unindent();
 					_globalGraph_RenderStatesExist = true;
 				}
@@ -155,6 +160,7 @@ class GuiSystem extends System {
 		if (_globalGraph_RenderStatesExist) {
 			_ui.checkStates.get(_globalGraph_RenderSitesCheckID).selected = settings.get('renderSites');
 			_ui.checkStates.get(_globalGraph_RenderRegionsCheckID).selected = settings.get('renderRegions');
+			_ui.checkStates.get(_globalGraph_RenderFilledRegionsCheckID).selected = settings.get('renderFilledRegions');
 			_ui.checkStates.get(_globalGraph_RenderTriangulationCheckID).selected = settings.get('renderTriangulation');
 			_ui.checkStates.get(_globalGraph_RenderHullCheckID).selected = settings.get('renderHull');
 			_ui.checkStates.get(_globalGraph_RenderOnionCheckID).selected = settings.get('renderOnion');
@@ -168,6 +174,7 @@ class GuiSystem extends System {
 		if (_globalGraph_RenderStatesExist) {
 			settings.set('renderSites', _ui.checkStates.get(_globalGraph_RenderSitesCheckID).selected);
 			settings.set('renderRegions', _ui.checkStates.get(_globalGraph_RenderRegionsCheckID).selected);
+			settings.set('renderFilledRegions', _ui.checkStates.get(_globalGraph_RenderFilledRegionsCheckID).selected);
 			settings.set('renderTriangulation', _ui.checkStates.get(_globalGraph_RenderTriangulationCheckID).selected);
 			settings.set('renderHull', _ui.checkStates.get(_globalGraph_RenderHullCheckID).selected);
 			settings.set('renderOnion', _ui.checkStates.get(_globalGraph_RenderOnionCheckID).selected);

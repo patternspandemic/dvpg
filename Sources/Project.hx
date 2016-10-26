@@ -46,6 +46,7 @@ class Project {
 		var renderF:Int = 15;
 		var renderG:Int = 16;
 		var renderH:Int = 17;
+		var renderI:Int = 18;
 		var gui:Int = 20;
 
 		// Kha Services & Systems
@@ -83,15 +84,20 @@ class Project {
 		config.add(new KeyBindsSystem(), behavior);
 
 		// Render (10-19)
+		// TODO: Turn render system priorities indide out with a
+		// RenderGlobalGraphSystem, RenderSelectedGraphSystem
+		// (for site specific cv graph rendering). Then use only
+		// a couple render priorities.
 		config.add(new RenderBackgroundSystem(), renderA);
 		config.add(new RenderBoundsSystem(), renderB);
-		config.add(new RenderRegionsSystem(), renderC);
-		config.add(new RenderCirclesSystem(), renderC);
-		config.add(new RenderOnionSystem(), renderD);
-		config.add(new RenderTriangulationSystem(), renderE);
-		config.add(new RenderHullSystem(), renderF);
-		config.add(new RenderMinSpanTreeSystem(), renderG);
-		config.add(new RenderDotSystem(), renderH);
+		config.add(new RenderFilledRegionsSystem(), renderC);
+		config.add(new RenderRegionsSystem(), renderD);
+		config.add(new RenderCirclesSystem(), renderD);
+		config.add(new RenderOnionSystem(), renderE);
+		config.add(new RenderTriangulationSystem(), renderF);
+		config.add(new RenderHullSystem(), renderG);
+		config.add(new RenderMinSpanTreeSystem(), renderH);
+		config.add(new RenderDotSystem(), renderI);
 
 		// GUI (20)
 		config.add(new GuiSystem(), gui);
