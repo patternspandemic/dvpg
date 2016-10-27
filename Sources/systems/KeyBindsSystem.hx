@@ -48,9 +48,24 @@ class KeyBindsSystem extends System {
 			globalGraphSettings.set('renderFilledRegions', !globalGraphSettings.get('renderFilledRegions'));
 		}
 
+		// Render region centroids toggle
+		if (keys.upKeys.has(".".code)) {
+			globalGraphSettings.set('renderRegionCentroids', !globalGraphSettings.get('renderRegionCentroids'));
+		}
+
 		// Render triangulation toggle
 		if (keys.upKeys.has("t".code)) {
 			globalGraphSettings.set('renderTriangulation', !globalGraphSettings.get('renderTriangulation'));
+		}
+
+		// Render filled triangles toggle
+		if (keys.upKeys.has("y".code)) {
+			globalGraphSettings.set('renderFilledTriangles', !globalGraphSettings.get('renderFilledTriangles'));
+		}
+
+		// Render triangle barycenters toggle
+		if (keys.upKeys.has(",".code)) {
+			globalGraphSettings.set('renderTriangleCentroids', !globalGraphSettings.get('renderTriangleCentroids'));
 		}
 
 		// Render hull toggle

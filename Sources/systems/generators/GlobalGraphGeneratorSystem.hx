@@ -24,7 +24,10 @@ class GlobalGraphGeneratorSystem extends System {
 		settings.set('renderSites', true);
 		settings.set('renderRegions', false);
 		settings.set('renderFilledRegions', false);
+		settings.set('renderRegionCentroids', false);
 		settings.set('renderTriangulation', false);
+		settings.set('renderFilledTriangles', false);
+		settings.set('renderTriangleCentroids', false);
 		settings.set('renderHull', false);
 		settings.set('renderOnion', false);
 		settings.set('renderMinSpanTree', false);
