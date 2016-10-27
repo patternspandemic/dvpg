@@ -47,6 +47,7 @@ class Project {
 		var renderG:Int = 16;
 		var renderH:Int = 17;
 		var renderI:Int = 18;
+		var renderJ:Int = 19;
 		var gui:Int = 20;
 
 		// Kha Services & Systems
@@ -57,6 +58,7 @@ class Project {
 		config.add(new SystemRunner());
 		config.add(new EntityCreatorService());
 		config.add(new NamedEntityService());
+		config.add(new GeometryToolsService());
 
 		// Project Systems
 		config.add(new TimeSystem(), -1000);
@@ -93,11 +95,12 @@ class Project {
 		config.add(new RenderFilledRegionsSystem(), renderC);
 		config.add(new RenderRegionsSystem(), renderD);
 		config.add(new RenderCirclesSystem(), renderD);
-		config.add(new RenderOnionSystem(), renderE);
+		config.add(new RenderFilledTrianglesSystem(), renderE);
 		config.add(new RenderTriangulationSystem(), renderF);
-		config.add(new RenderHullSystem(), renderG);
-		config.add(new RenderMinSpanTreeSystem(), renderH);
-		config.add(new RenderDotSystem(), renderI);
+		config.add(new RenderOnionSystem(), renderG);
+		config.add(new RenderHullSystem(), renderH);
+		config.add(new RenderMinSpanTreeSystem(), renderI);
+		config.add(new RenderDotSystem(), renderJ);
 
 		// GUI (20)
 		config.add(new GuiSystem(), gui);
