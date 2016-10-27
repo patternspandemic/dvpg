@@ -14,16 +14,14 @@ import core.KhaRenderService;
 import services.NamedEntityService;
 import services.GeometryToolsService;
 import components.*;
+import components.types.AbstractFastVector2;
 
 class RenderFilledTrianglesSystem extends System {
 
 	var _namedEntities: Wire<NamedEntityService>;
-	var _geomTools: Wire<GeometryToolsService>;
-	var _dot: Wire<Dot>;
-	var _site: Wire<Sites>;
-	var _triangles: Wire<Triangles>;
-
 	var _settings: Wire<Settings>;
+	var _geomTools: Wire<GeometryToolsService>;
+	var _triangles: Wire<Triangles>;
 
 	var _krs: Wire<KhaRenderService>;
 
@@ -41,17 +39,24 @@ class RenderFilledTrianglesSystem extends System {
 
 		c = graphics.color;
 
-
-		// var color: Color = _dot.get(entity).color;
-		var color: Color = Color.Green;
+		var r: Float;
+		var g: Float;
+		var b: Float;
+		var m: Float;
+		var color: Color;
 
 		for (triangle in triangles) {
 			if (triangle != null && triangle.length > 0) {
 				var centroid = _geomTools.polyCentroid(triangle);
+				var verts = triangle.map(function(fv: FastVector2) { return new Vector2(fv.x, fv.y); });
+				r = verts[1].sub(centroid).length;
+				g = verts[2].sub(centroid).length;
+				b = verts[0].sub(centroid).length;
+				m = Math.max(r, Math.max(g, b));
+				color = Color.fromFloats(r/m, g/m, b/m);
 
 				if (globalGraphSettings.get('renderFilledTriangles')) {
 					graphics.color = color;
-					var verts = triangle.map(function(fv: FastVector2) { return new Vector2(fv.x, fv.y); });
 					graphics.fillTriangle(verts[0].x, verts[0].y, verts[1].x, verts[1].y, verts[2].x, verts[2].y);
 				}
 
@@ -62,7 +67,6 @@ class RenderFilledTrianglesSystem extends System {
 
 			}
 		}
-
 
 		graphics.color = c;
 		graphics.end();
