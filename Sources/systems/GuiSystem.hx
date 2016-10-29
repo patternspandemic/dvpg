@@ -159,7 +159,7 @@ class GuiSystem extends System {
 				// Site Settings
 				if (_ui.node(Id.node(), "Sites", 1, true)) {
 					_ui.indent();
-					var siteCnt: Int = Std.int(_ui.slider(Id.slider(), 'Count', 0.0, 50.0, true, 1, globalSettings.get('siteCount'), true));
+					var siteCnt: Int = Std.int(_ui.slider(Id.slider(), 'Count', 3.0, 50.0, true, 1, globalSettings.get('siteCount'), true));
 					globalSettings.set('siteCount', siteCnt);
 					var siteSpeedMult: Float = _ui.slider(Id.slider(), 'Speed Multiplier', 0.0, 3.0, true, 100, globalSettings.get('siteSpeedMultiplier'), true);
 					globalSettings.set('siteSpeedMultiplier', siteSpeedMult);

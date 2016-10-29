@@ -36,7 +36,7 @@ class EntityCreatorService extends Service {
 	public function new(): Void {}
 
 	public function createDot(x:Float, y:Float, rot:Float, sx:Float, sy:Float, vx:Float, vy:Float, color:kha.Color):Entity {
-		var entity:Entity = world.create();
+		var entity:Entity = world.createPassive();
 		_transform.create(entity).setup(x, y, rot, sx, sy);
 		var vel = _motion.create(entity);
 		vel.x = vx;

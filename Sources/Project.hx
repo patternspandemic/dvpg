@@ -31,13 +31,16 @@ class Project {
 		var config = new WorldConfig();
 
 		// Priorities
-		var preUpdate:Int = 1;
-		var update:Int = 2;
-		var move:Int = 3;
-		var resolveCollisions:Int = 4;
-		var stateMachines:Int = 5;
-		var behavior:Int = 6;
-		var animate:Int = 7;
+		var generate:Int = 1;
+		var preUpdate:Int = 2;
+		var update:Int = 3;
+		var postUpdate:Int = 4;
+		var move:Int = 5;
+		var resolveCollisions:Int = 6;
+		var stateMachines:Int = 7;
+		var behavior:Int = 8;
+		var animate:Int = 9;
+
 		var renderA:Int = 10;
 		var renderB:Int = 11;
 		var renderC:Int = 12;
@@ -48,6 +51,7 @@ class Project {
 		var renderH:Int = 17;
 		var renderI:Int = 18;
 		var renderJ:Int = 19;
+
 		var gui:Int = 20;
 
 		// Kha Services & Systems
@@ -64,29 +68,33 @@ class Project {
 		config.add(new TimeSystem(), -1000);
 		config.add(new FpsMeter(), -999);
 
-		// Pre-Update (1)
-		config.add(new MouseGeneratorSystem(), preUpdate);
-		config.add(new KeysGeneratorSystem(), preUpdate);
-		config.add(new GlobalSettingsGeneratorSystem(), preUpdate);
-		config.add(new BoundsGeneratorSystem(), preUpdate);
-		config.add(new GlobalGraphGeneratorSystem(), preUpdate);
-		config.add(new DotGeneratorSystem(), preUpdate);
+		// Generate (1)
+		config.add(new MouseGeneratorSystem(), generate);
+		config.add(new KeysGeneratorSystem(), generate);
+		config.add(new GlobalSettingsGeneratorSystem(), generate);
+		config.add(new BoundsGeneratorSystem(), generate);
+		config.add(new GlobalGraphGeneratorSystem(), generate);
 
-		// Update (2)
-		config.add(new MouseSystem(), update);
-		config.add(new KeySystem(), update);
+		// Pre-Update (2)
+		config.add(new MouseSystem(), preUpdate);
+		config.add(new KeySystem(), preUpdate);
+		config.add(new SitesManagerSystem(), preUpdate);
+
+		// Update (3)
 		config.add(new TransformSystem(), update);
 		config.add(new SiteSystem(), update);
-		config.add(new DelaunayVoronoiSystem(), update);
 
-		// Move (3)
+		// Post-Update (4)
+		config.add(new DelaunayVoronoiSystem(), postUpdate);
+
+		// Move (5)
 		config.add(new MotionSystem(), move);
 
-		// Behavior (6)
+		// Behavior (8)
 		config.add(new KeyBindsSystem(), behavior);
 
 		// Render (10-19)
-		// TODO: Turn render system priorities indide out with a
+		// TODO: Turn render system priorities inside out with a
 		// RenderGlobalGraphSystem, RenderSelectedGraphSystem
 		// (for site specific cv graph rendering). Then use only
 		// a couple render priorities.

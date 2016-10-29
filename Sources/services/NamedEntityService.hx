@@ -65,4 +65,9 @@ class NamedEntityService extends Service {
 			return false;
 		}
 	}
+
+	// Remove a name from the service mapping
+	public function remove(name: String): Bool {
+		return _nameToEntityIDMap.remove(name);
+	}
 }
