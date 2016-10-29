@@ -18,6 +18,7 @@ import components.*;
 class MotionSystem extends System {
 
 	var _namedEntities: Wire<NamedEntityService>;
+	var _settings: Wire<Settings>;
 	var _bounds: Wire<Bounds>;
 
 	var _entities:Family<Transform, Motion>;
@@ -31,10 +32,12 @@ class MotionSystem extends System {
 	override function update(): Void {
 
 		// Get the bounds of the first and only bounded entity
+		var globalSettings = _settings.get(_namedEntities.get('GlobalSettings'));
 		var bounds = _bounds.get(_namedEntities.get('CanvasBounds'));
 		var trans;
 		var pos;
 		var vel;
+		var speedMult = globalSettings.get('siteSpeedMultiplier');
 		var dt = _time.deltaTime;
 		var x, vx, y, vy;
 
@@ -44,12 +47,12 @@ class MotionSystem extends System {
 			vel = _motion.get(entity);
 
 			// Bounce horizontally
-			x = pos.x + (vel.x * dt);
+			x = pos.x + (speedMult * vel.x * dt);
 			if (x < bounds.left) { x = bounds.left; vel.x *= -1;}
 			else if (x > bounds.right) { x = bounds.right; vel.x *= -1;}
 
 			// Bounce vertically
-			y = pos.y + (vel.y * dt);
+			y = pos.y + (speedMult * vel.y * dt);
 			if (y < bounds.top) { y = bounds.top; vel.y *= -1;}
 			else if (y > bounds.bottom) { y = bounds.bottom; vel.y *= -1;}
 

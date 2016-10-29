@@ -23,6 +23,8 @@ class GlobalSettingsGeneratorSystem extends System {
 		var settings = _settings.get(globalSettings);
 		settings.set('showGUI', false);
 		settings.set('profile', false);
+		settings.set('siteCount', 20);
+		settings.set('siteSpeedMultiplier', 1.0);
 		_namedEntities.set('GlobalSettings', globalSettings);
 	}
 }
