@@ -27,6 +27,8 @@ class MotionSystem extends System {
 
 	var _time:Wire<TimeSystem>;
 
+	var _dragThreshold: FastFloat = 50.0;
+
 	public function new() {}
 
 	override function update(): Void {
@@ -38,6 +40,8 @@ class MotionSystem extends System {
 		var pos;
 		var vel;
 		var speedMult = globalSettings.get('siteSpeedMultiplier');
+		var drag = globalSettings.get('siteDrag');
+		drag = drag / 100;
 		var dt = _time.deltaTime;
 		var x, vx, y, vy;
 
@@ -45,6 +49,12 @@ class MotionSystem extends System {
 			trans = _transform.get(entity);
 			pos = trans.position;
 			vel = _motion.get(entity);
+
+			if (vel.length > _dragThreshold) {
+				var velD = vel.mult(1.0 - drag);
+				_motion.set(entity, velD);
+				vel = velD;
+			}
 
 			// Bounce horizontally
 			x = pos.x + (speedMult * vel.x * dt);

@@ -163,6 +163,8 @@ class GuiSystem extends System {
 					globalSettings.set('siteCount', siteCnt);
 					var siteSpeedMult: Float = _ui.slider(Id.slider(), 'Speed Multiplier', 0.0, 3.0, true, 100, globalSettings.get('siteSpeedMultiplier'), true);
 					globalSettings.set('siteSpeedMultiplier', siteSpeedMult);
+					var siteDrag: Float = _ui.slider(Id.slider(), 'Drag', 0.0, 1.0, true, 100, globalSettings.get('siteDrag'), true);
+					globalSettings.set('siteDrag', siteDrag);
 					_ui.unindent();
 				}
 			}

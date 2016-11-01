@@ -25,6 +25,7 @@ class GlobalSettingsGeneratorSystem extends System {
 		settings.set('profile', false);
 		settings.set('siteCount', 20);
 		settings.set('siteSpeedMultiplier', 1.0);
+		settings.set('siteDrag', 0.5);
 		_namedEntities.set('GlobalSettings', globalSettings);
 	}
 }
