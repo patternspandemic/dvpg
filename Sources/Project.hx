@@ -79,6 +79,7 @@ class Project {
 		config.add(new MouseSystem(), preUpdate);
 		config.add(new KeySystem(), preUpdate);
 		config.add(new SitesManagerSystem(), preUpdate);
+		config.add(new DraggableSiteSystem(), preUpdate);
 
 		// Update (3)
 		config.add(new TransformSystem(), update);
