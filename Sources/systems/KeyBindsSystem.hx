@@ -92,6 +92,12 @@ class KeyBindsSystem extends System {
 		if (keys.upKeys.has("b".code)) {
 			globalGraphSettings.set('renderBounds', !globalGraphSettings.get('renderBounds'));
 		}
+
+		// Animate sites toggle
+		if (keys.upKeys.has("a".code)) {
+			globalGraphSettings.set('animateSites', !globalGraphSettings.get('animateSites'));
+		}
+
 	}
 
 }

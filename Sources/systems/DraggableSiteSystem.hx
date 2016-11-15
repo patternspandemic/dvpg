@@ -67,12 +67,16 @@ class DraggableSiteSystem extends System {
 							}
 
 							if (_draggedEntity != null) {
+								var trans = _transform.get(_draggedEntity);
+								var motion: FastVector2;
 								// Transform mouse position coords to canvas coords
 								var mousePos: FastVector2 = new FastVector2(
 											mouse.position.x - (canvasBounds.width / 2),
 											mouse.position.y - (canvasBounds.height / 2));
-								_transform.get(_draggedEntity).position = mousePos;
-								_motion.set(_draggedEntity, new FastVector2(mouse.changeInPosition.x * 50, mouse.changeInPosition.y * 50));
+								trans.position = mousePos;
+								motion = new FastVector2(mouse.changeInPosition.x * 50, mouse.changeInPosition.y * 50);
+								_motion.set(_draggedEntity, motion);
+								trans.rotation = Math.atan2(motion.y, motion.x);
 							}
 
 						} else {

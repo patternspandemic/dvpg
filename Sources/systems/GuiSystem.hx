@@ -44,6 +44,9 @@ class GuiSystem extends System {
 	var _globalGraph_RenderCirclesCheckID: String;
 	var _globalGraph_RenderBoundsCheckID: String;
 
+	var _globalGraph_SiteStatesExist: Bool;
+	var _globalGraph_AnimateSitesCheckID: String;
+
 	public function new() {
 		_ui = new Zui(Assets.fonts.HackRegular, 16, 14);
 		_winId = Id.window();
@@ -61,6 +64,9 @@ class GuiSystem extends System {
 		_globalGraph_RenderMinSpanTreeCheckID = Id.check();
 		_globalGraph_RenderCirclesCheckID = Id.check();
 		_globalGraph_RenderBoundsCheckID = Id.check();
+
+		_globalGraph_SiteStatesExist = false;
+		_globalGraph_AnimateSitesCheckID = Id.check();
 	}
 
 	override function update(): Void {
@@ -152,7 +158,6 @@ class GuiSystem extends System {
 					_ui.unindent();
 					_globalGraph_RenderStatesExist = true;
 				}
-				syncStatesToGlobalGraphSettings(globalGraphSettings);
 
 				_ui.separator();
 
@@ -165,8 +170,11 @@ class GuiSystem extends System {
 					globalSettings.set('siteSpeedMultiplier', siteSpeedMult);
 					var siteDrag: Float = _ui.slider(Id.slider(), 'Drag', 0.0, 1.0, true, 100, globalSettings.get('siteDrag'), true);
 					globalSettings.set('siteDrag', siteDrag);
+					_ui.check(_globalGraph_AnimateSitesCheckID, 'Animate', globalGraphSettings.get('animateSites'));
 					_ui.unindent();
+					_globalGraph_SiteStatesExist = true;
 				}
+				syncStatesToGlobalGraphSettings(globalGraphSettings);
 			}
 
 			_ui.end();
@@ -190,6 +198,9 @@ class GuiSystem extends System {
 			_ui.checkStates.get(_globalGraph_RenderCirclesCheckID).selected = settings.get('renderCircles');
 			_ui.checkStates.get(_globalGraph_RenderBoundsCheckID).selected = settings.get('renderBounds');
 		}
+		if (_globalGraph_SiteStatesExist) {
+			_ui.checkStates.get(_globalGraph_AnimateSitesCheckID).selected = settings.get('animateSites');
+		}
 	}
 
 	function syncStatesToGlobalGraphSettings(settings: StringMap<Dynamic>): Void {
@@ -206,6 +217,9 @@ class GuiSystem extends System {
 			settings.set('renderMinSpanTree', _ui.checkStates.get(_globalGraph_RenderMinSpanTreeCheckID).selected);
 			settings.set('renderCircles', _ui.checkStates.get(_globalGraph_RenderCirclesCheckID).selected);
 			settings.set('renderBounds', _ui.checkStates.get(_globalGraph_RenderBoundsCheckID).selected);
+		}
+		if (_globalGraph_SiteStatesExist) {
+			settings.set('animateSites', _ui.checkStates.get(_globalGraph_AnimateSitesCheckID).selected);
 		}
 	}
 }

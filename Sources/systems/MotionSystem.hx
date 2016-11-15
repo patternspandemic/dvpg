@@ -32,46 +32,48 @@ class MotionSystem extends System {
 	public function new() {}
 
 	override function update(): Void {
+		var globalGraphSettings = _settings.get(_namedEntities.get('GlobalGraph'));
 
-		// Get the bounds of the first and only bounded entity
-		var globalSettings = _settings.get(_namedEntities.get('GlobalSettings'));
-		var bounds = _bounds.get(_namedEntities.get('CanvasBounds'));
-		var trans;
-		var pos;
-		var vel;
-		var speedMult = globalSettings.get('siteSpeedMultiplier');
-		var drag = globalSettings.get('siteDrag');
-		drag = drag / 100;
-		var dt = _time.deltaTime;
-		var x, vx, y, vy;
+		if (globalGraphSettings.get('animateSites') == true) {
+			var globalSettings = _settings.get(_namedEntities.get('GlobalSettings'));
+			var bounds = _bounds.get(_namedEntities.get('CanvasBounds'));
+			var trans;
+			var pos;
+			var vel;
+			var speedMult = globalSettings.get('siteSpeedMultiplier');
+			var drag = globalSettings.get('siteDrag');
+			drag = drag / 100;
+			var dt = _time.deltaTime;
+			var x, vx, y, vy;
 
-		for (entity in _entities) {
-			trans = _transform.get(entity);
-			pos = trans.position;
-			vel = _motion.get(entity);
+			for (entity in _entities) {
+				trans = _transform.get(entity);
+				pos = trans.position;
+				vel = _motion.get(entity);
 
-			if (vel.length > _dragThreshold) {
-				var velD = vel.mult(1.0 - drag);
-				_motion.set(entity, velD);
-				vel = velD;
+				if (vel.length > _dragThreshold) {
+					var velD = vel.mult(1.0 - drag);
+					_motion.set(entity, velD);
+					vel = velD;
+				}
+
+				// Bounce horizontally
+				x = pos.x + (speedMult * vel.x * dt);
+				if (x < bounds.left) { x = bounds.left; vel.x *= -1;}
+				else if (x > bounds.right) { x = bounds.right; vel.x *= -1;}
+
+				// Bounce vertically
+				y = pos.y + (speedMult * vel.y * dt);
+				if (y < bounds.top) { y = bounds.top; vel.y *= -1;}
+				else if (y > bounds.bottom) { y = bounds.bottom; vel.y *= -1;}
+
+				// Assign the new position
+				pos.x = x;
+				pos.y = y;
+
+				// Rotate in the direction of travel
+				trans.rotation = Math.atan2(vel.y, vel.x);
 			}
-
-			// Bounce horizontally
-			x = pos.x + (speedMult * vel.x * dt);
-			if (x < bounds.left) { x = bounds.left; vel.x *= -1;}
-			else if (x > bounds.right) { x = bounds.right; vel.x *= -1;}
-
-			// Bounce vertically
-			y = pos.y + (speedMult * vel.y * dt);
-			if (y < bounds.top) { y = bounds.top; vel.y *= -1;}
-			else if (y > bounds.bottom) { y = bounds.bottom; vel.y *= -1;}
-
-			// Assign the new position
-			pos.x = x;
-			pos.y = y;
-
-			// Rotate in the direction of travel
-			trans.rotation = Math.atan2(vel.y, vel.x);
 		}
 	}
 }
