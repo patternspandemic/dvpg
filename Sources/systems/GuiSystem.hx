@@ -86,10 +86,13 @@ class GuiSystem extends System {
 				// Stats
 				if (_ui.node(Id.node(), "Stats", 1, false)) {
 					_ui.row([3/10, 2/10, 2/10, 3/10]);
-					_ui.text("" + _stats.dt, Zui.ALIGN_CENTER);
-					_ui.text("< DT");
+					// _ui.text("" + _stats.dt, Zui.ALIGN_CENTER);
+					// _ui.text("< DT");
+					_ui.text("" + _stats.fta, Zui.ALIGN_CENTER);
+					_ui.text("< FTA");
 					_ui.text("FPS >");
 					_ui.text("" + _stats.fps, Zui.ALIGN_CENTER);
+					_ui.text("" + _stats.prof_total, Zui.ALIGN_CENTER);
 				}
 
 				_ui.separator();

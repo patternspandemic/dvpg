@@ -66,7 +66,8 @@ class Project {
 
 		// Project Systems
 		config.add(new TimeSystem(), -1000);
-		config.add(new FpsMeter(), -999);
+		// config.add(new FpsMeter(), -999);
+		config.add(new FpsMeterSystem(), -999);
 
 		// Generate (1)
 		config.add(new MouseGeneratorSystem(), generate);

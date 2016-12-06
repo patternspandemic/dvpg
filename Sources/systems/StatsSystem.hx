@@ -3,9 +3,9 @@ package systems;
 import ecx.Family;
 import ecx.System;
 import ecx.Wire;
-import ecx.common.systems.FpsMeter;
+// import ecx.common.systems.FpsMeter;
 import ecx.common.systems.SystemRunner;
-import ecx.common.systems.TimeSystem;
+// import ecx.common.systems.TimeSystem;
 
 import kha.Key;
 
@@ -17,14 +17,17 @@ class StatsSystem extends System {
 
 	var _namedEntities: Wire<NamedEntityService>;
 	var _settings: Wire<Settings>;
-	var _fpsMeter: Wire<FpsMeter>;
-	var _time: Wire<TimeSystem>;
+	var _fpsMeter: Wire<FpsMeterSystem>;
+	// var _fpsMeter: Wire<FpsMeter>;
+	// var _time: Wire<TimeSystem>;
 	var _runner: Wire<SystemRunner>;
 
 	var _clearMaps:Bool = false;
 
 	public var fps: Float = 0.0;
-	public var dt: Float = 0.0;
+	public var fta: Float = 0.0;
+	public var prof_total: Float = 0.0;
+	// public var dt: Float = 0.0;
 	public var profiles: Map<String, SystemProfile>;
 	public var comps: Map<String, Int>;
 
@@ -43,7 +46,8 @@ class StatsSystem extends System {
 
 		// Update fps and dt
 		this.fps = formatD2(_fpsMeter.framesPerSecond);
-		this.dt = formatD2(_time.deltaTime * 1000);
+		this.fta = formatD2(_fpsMeter.frameTimeAverage);
+		// this.dt = formatD2(_time.deltaTime * 1000);
 
 		if (profiling) {
 
@@ -58,6 +62,7 @@ class StatsSystem extends System {
 						removed: profile.removed
 					});
 			}
+			this.prof_total = formatD2(_runner.profileTotal);
 
 			// Collect component profile data
 			for (comp in world.components()) {
