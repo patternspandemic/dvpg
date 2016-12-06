@@ -96,21 +96,10 @@ class Project {
 		config.add(new KeyBindsSystem(), behavior);
 
 		// Render (10-19)
-		// TODO: Turn render system priorities inside out with a
-		// RenderGlobalGraphSystem, RenderSelectedGraphSystem
-		// (for site specific cv graph rendering). Then use only
-		// a couple render priorities.
 		config.add(new RenderBackgroundSystem(), renderA);
-		config.add(new RenderBoundsSystem(), renderB);
-		config.add(new RenderFilledRegionsSystem(), renderC);
-		config.add(new RenderRegionsSystem(), renderD);
-		config.add(new RenderCirclesSystem(), renderD);
-		config.add(new RenderFilledTrianglesSystem(), renderE);
-		config.add(new RenderTriangulationSystem(), renderF);
-		config.add(new RenderOnionSystem(), renderG);
-		config.add(new RenderHullSystem(), renderH);
-		config.add(new RenderMinSpanTreeSystem(), renderI);
-		config.add(new RenderDotSystem(), renderJ);
+		config.add(new RenderGlobalGraphSystem(), renderB);
+		// config.add(new RenderSelectedSiteSystem(), renderC);
+		config.add(new RenderDotSystem(), renderD);
 
 		// GUI (20)
 		config.add(new GuiSystem(), gui);
