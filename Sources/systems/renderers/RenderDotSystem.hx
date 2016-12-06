@@ -43,7 +43,6 @@ class RenderDotSystem extends System {
 			prevC = graphics.color;
 
 			for (entity in _entities) {
-				// TODO: Per site draw check
 				transform = _transform.get(entity).transform;
 				c = _dot.get(entity).color;
 				graphics.pushTransformation(graphics.transformation.multmat(transform));
