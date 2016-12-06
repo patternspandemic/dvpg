@@ -7,6 +7,7 @@ import ecx.Entity;
 import ecx.common.components.Name;
 
 import kha.Color;
+import kha.math.Random;
 
 import services.*;
 import components.*;
@@ -29,8 +30,11 @@ class SitesManagerSystem extends System {
 	var _canvasHalfH: Float;
 	var _globalSettings: Entity;
 
+	var _random: Random;
+
 	public function new() {
 		_sitedEntityPool = new ObjectPool<Entity>(sitedEntityFactory, sitedEntityDisposer, 50);
+		_random = new Random(0);
 	}
 
 	override function initialize() {
@@ -72,16 +76,16 @@ class SitesManagerSystem extends System {
 
 	function sitedEntityFactory(): Entity {
 		var i: Int = _sitedEntityPool.size;
-		var x: Float = ((Math.random() - 0.5) * 2.0) * _canvasHalfW;
-		var y: Float = ((Math.random() - 0.5) * 2.0) * _canvasHalfH;
-		var vx: Float = ((Math.random() - 0.5) * 2.0) * 50;
-		var vy: Float = ((Math.random() - 0.5) * 2.0) * 50;
+		var y: Float = _random.GetFloatIn(-1.0, 1.0) * _canvasHalfH;
+		var x: Float = _random.GetFloatIn(-1.0, 1.0) * _canvasHalfW;
+		var vx: Float = _random.GetFloatIn(-1.0, 1.0) * 50;
+		var vy: Float = _random.GetFloatIn(-1.0, 1.0) * 50;
 		var dot: Entity = _creator.createDot(
 			x, y,
 			Math.atan2(vy, vx),
 			0.8, 0.7,
 			vx, vy,
-			Color.fromFloats(Math.random(), Math.random(), Math.random())
+			Color.fromFloats(_random.GetFloatIn(0.0, 1.0), _random.GetFloatIn(0.0, 1.0), _random.GetFloatIn(0.0, 1.0))
 		);
 		_namedEntities.set('Dot${i}', dot);
 		return dot;

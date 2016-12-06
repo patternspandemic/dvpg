@@ -597,10 +597,10 @@ class Zui {
 		drawRect(g, t.FILL_CHECK_BG, x, y, CHECK_W(), CHECK_H(), 2); // Bg
 
 		if (selected) { // Check
-			//g.color = t.CHECK_SELECT_COL;
-			//g.fillRect(x + checkSelectOffsetX, y + checkSelectOffsetY, CHECK_SELECT_W(), CHECK_SELECT_H());
-			g.color = kha.Color.White;
-			g.drawImage(checkSelectImage, x + checkSelectOffsetX, y + checkSelectOffsetY);
+			g.color = t.CHECK_SELECT_COL;
+			g.fillRect(x + checkSelectOffsetX, y + checkSelectOffsetY, CHECK_SELECT_W(), CHECK_SELECT_H());
+			// g.color = kha.Color.White;
+			// g.drawImage(checkSelectImage, x + checkSelectOffsetX, y + checkSelectOffsetY);
 		}
 	}
 
